@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <vxe-button @click="insertEvent">新增</vxe-button>
     <vxe-table
@@ -58,4 +58,4 @@ const insertEvent = async () => {
 const editActivatedEvent = (params: any) => {
   console.log(params)
 }
-</script>
+</script> -->
