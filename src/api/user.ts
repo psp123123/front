@@ -22,18 +22,18 @@ export const getUserList = (page = 1, pageSize = 10, keyword = '') => {
   }
 }
 
-export const addUser = (user) => {
+export const addUser = (user: any) => {
   user.id = nextId++
   users.push(user)
 }
 
-export const updateUser = (updatedUser) => {
+export const updateUser = (updatedUser: any) => {
   const index = users.findIndex((u) => u.id === updatedUser.id)
   if (index !== -1) {
     users[index] = { ...users[index], ...updatedUser }
   }
 }
 
-export const deleteUser = (id) => {
+export const deleteUser = (id: number) => {
   users = users.filter((u) => u.id !== id)
 }
