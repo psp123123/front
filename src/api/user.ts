@@ -37,3 +37,45 @@ export const updateUser = (updatedUser: any) => {
 export const deleteUser = (id: number) => {
   users = users.filter((u) => u.id !== id)
 }
+
+// 向后端交互
+// axios全局默认值
+import axios from 'axios'
+
+// 定义表单类型
+interface LoginParams {
+  username: string
+  password: string
+}
+
+// 定义接口返回数据类型
+interface LoginResponse {
+  code: number
+  data: {
+    token: string
+  }
+  message: string
+}
+
+// 创建axios实例
+const api = axios.create({
+  baseURL: import.meta.env.BASE_URL,
+  timeout: 5000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+// 发送POST请求
+export async function identifyUser(params: LoginParams): Promise<LoginResponse> {
+  try {
+    const response = await api.post<LoginResponse>('/login', {
+      user: params.username,
+      passwd: params.password,
+    })
+    return response.data
+  } catch (error) {
+    console.error(error)
+    throw error
+  }
+}

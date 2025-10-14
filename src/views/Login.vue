@@ -23,6 +23,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { identifyUser } from '@/api/user'
+import { ElMessage } from 'element-plus'
 
 const username = ref('')
 const password = ref('')
@@ -31,13 +33,24 @@ const password = ref('')
 // 登陆跳转到/或/home路径
 // 发送请求到服务端，获取access Token和refresh Token
 // 获取到的token存放客户端相应位置
-const login_btn = (() => {
-  console.log("username", username.value, "passwd", password)
+const login_btn = async () => {
+  console.log("username:", username.value, "passwd:", password.value)
+  try {
+    const result = await identifyUser({
+      username: username.value,
+      password: password.value
+    })
+    if (result.code === 200) {
+      ElMessage.success("登陆成功")
+      localStorage.setItem('token', result.data.token)
+    }
+  } catch (error) {
+    ElMessage.error('登陆失败，请重试')
+  }
 
 
 
-
-})
+}
 
 
 </script>
