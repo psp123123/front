@@ -32,7 +32,11 @@ const password = ref('')
 // 发送请求到服务端，获取access Token和refresh Token
 // 获取到的token存放客户端相应位置
 const login_btn = (() => {
-  console.log("username", username, "passwd", password)
+  console.log("username", username.value, "passwd", password)
+
+
+
+
 })
 
 
