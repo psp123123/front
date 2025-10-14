@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="data" :loading="loading" border style="width: 100%" v-loading="loading">
+  <el-table :data="data" :loading="loading" v-loading="loading" class="registry_container">
     <el-table-column prop="name" label="用户名" width="120" />
     <el-table-column prop="email" label="邮箱" />
     <el-table-column prop="role" label="角色" width="120" />
@@ -18,14 +18,9 @@
     </el-table-column>
   </el-table>
 
-  <div class="pagination-wrapper" style="margin-top: 20px; text-align: right">
-    <el-pagination
-      v-model:current-page="pagination.currentPage"
-      :page-size="pagination.pageSize"
-      :total="pagination.total"
-      layout="total, prev, pager, next"
-      @current-change="emit('page-change', $event)"
-    />
+  <div class="pagination-wrapper">
+    <el-pagination v-model:current-page="pagination.currentPage" :page-size="pagination.pageSize"
+      :total="pagination.total" layout="total, prev, pager, next" @current-change="emit('page-change', $event)" />
   </div>
 </template>
 
@@ -38,3 +33,15 @@ defineProps({
 
 const emit = defineEmits(['edit', 'delete', 'page-change'])
 </script>
+
+<style>
+.pagination-wrapper {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.registry_container {
+  width: 100%;
+  border: 0cap;
+}
+</style>
