@@ -13,7 +13,7 @@
             <el-input v-model="password" type="password" show-password></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" size="default" color="" class="login_btn">登陆</el-button>
+            <el-button type="primary" size="default" color="" class="login_btn" @click="login_btn">登陆</el-button>
           </el-form-item>
         </el-form>
       </el-col>
@@ -27,10 +27,13 @@ import { ref } from 'vue'
 const username = ref('')
 const password = ref('')
 
+// 验证用户名及密码
 // 登陆跳转到/或/home路径
 // 发送请求到服务端，获取access Token和refresh Token
 // 获取到的token存放客户端相应位置
-
+const login_btn = (() => {
+  console.log("username", username, "passwd", password)
+})
 
 
 </script>
