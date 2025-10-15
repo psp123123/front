@@ -74,6 +74,7 @@ export async function identifyUser(params: LoginParams): Promise<LoginResponse> 
       user: params.username,
       passwd: params.password,
     })
+    console.log(response.data)
     return response.data
   } catch (error) {
     console.error(error)
