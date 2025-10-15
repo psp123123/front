@@ -59,13 +59,15 @@ interface LoginResponse {
 
 // 创建axios实例
 const api = axios.create({
-  baseURL: import.meta.env.BASE_URL,
+  baseURL: ,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
   },
+  
 })
 
+console.log('拼接的请求url:', import.meta.env.BASE_URL)
 // 发送POST请求
 export async function identifyUser(params: LoginParams): Promise<LoginResponse> {
   try {
