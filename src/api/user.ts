@@ -51,9 +51,9 @@ interface LoginParams {
 // 定义接口返回数据类型
 interface LoginResponse {
   code: number
-  data: {
-    token: string
-  }
+
+  token: string
+
   message: string
 }
 

@@ -42,7 +42,7 @@ const login_btn = async () => {
     })
     if (result.code === 200) {
       ElMessage.success("登陆成功")
-      localStorage.setItem('token', result.data.token)
+      localStorage.setItem('token', result.token)
     }
   } catch (error) {
     ElMessage.error('登陆失败，请重试')
