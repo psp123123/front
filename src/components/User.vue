@@ -31,6 +31,7 @@ defineOptions({
 
 // 引入pinia数据
 const configStore = useConfigStore()
+console.log('当前登陆用户:', configStore.userInfo)
 
 // 正确的顺序：先导入，再使用
 const router = useRouter()
