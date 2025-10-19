@@ -26,10 +26,12 @@ import { ref } from 'vue'
 import { identifyUser } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import useConfigStore from '@/stores/modules/config'
 
 const router = useRouter()
 const username = ref('')
 const password = ref('')
+const storeInfo = useConfigStore()
 
 // 发送用户名及密码
 // 发送请求到服务端，获取access Token和refresh Token
@@ -49,6 +51,8 @@ const login_btn = async () => {
       // accessTOken存储到本地
       localStorage.setItem('accessToken', result.data.accessToken)
 
+      // 登陆用户信息写入pinia中
+      storeInfo.setUser(result.data.username)
       // 跳转到home页面
       router.push('/home')
     }

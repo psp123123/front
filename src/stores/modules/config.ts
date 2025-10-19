@@ -27,13 +27,18 @@ export function filterMenu(routes: RouteItem[]): RouteItem[] {
 let useConfigStore = defineStore('config', {
   state: () => {
     return {
-      Token: 'Token Admin',
+      Token: 'Token Admin', // 后续需要处理
       menuList: filterMenu(constantroutes),
+      userInfo: null as string | null,
     }
   },
 
   // actions
-  actions: () => {},
+  actions: {
+    setUser(user: string) {
+      this.userInfo = user
+    },
+  },
   getters: {},
 })
 

@@ -81,6 +81,7 @@ const logout = (): void => {
   console.log('用户登出')
   // 执行登出逻辑
   showDropdown.value = false
+  router.push('/logout')
 }
 </script>
 <style scoped>

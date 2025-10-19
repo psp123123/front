@@ -13,7 +13,9 @@ interface LoginResponse {
   code: number
   data: {
     accessToken: string
-    refreshToken: string
+    username: string
+    userID: string
+    nickname: string
   }
   message: string
 }
