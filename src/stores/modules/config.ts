@@ -37,7 +37,6 @@ let useConfigStore = defineStore('config', {
   actions: {
     setUser(user: string) {
       this.userInfo = user
-      console.log('当前用户：', user)
     },
   },
   getters: {},

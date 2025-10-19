@@ -1,29 +1,35 @@
 <template>
-  <div class="right-section">
-    <div class="dropdown" @mouseenter="showDropdownMenu" @mouseleave="hideDropdownMenu">
-      <!-- 悬停区域 -->
-      <div class="user-name" @click="toggleDropdown" @blur="hideDropdown" tabindex="0">
-        {{ configStore.userInfo }}
-      </div>
 
-      <!-- 下拉菜单 -->
-      <ul v-if="showDropdown" class="user-select-dropdown">
-        <li @click="selectUser('account')" class="user-select-item">账户</li>
+  <el-col :span="8">
+    <el-dropdown trigger="click">
+      <span class="el-dropdown-link">
+        {{ configStore.userInfo }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
+      </span>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item :icon="Plus">账户</el-dropdown-item>
+          <el-dropdown-item :icon="CirclePlusFilled">
+            登出
+          </el-dropdown-item>
 
-        <li @click="logout">登出</li>
-      </ul>
-    </div>
-
-    <div>
-      <img src="../assets/logo.png" alt="User Avatar" class="avatar-image" />
-    </div>
-  </div>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+  </el-col>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import useConfigStore from '@/stores/modules/config'
+import {
+  ArrowDown,
+  Check,
+  CircleCheck,
+  CirclePlus,
+  CirclePlusFilled,
+  Plus,
+} from '@element-plus/icons-vue'
 
 defineOptions({
   name: 'User',
@@ -143,5 +149,17 @@ const logout = (): void => {
   width: 40px;
   height: 40px;
   border-radius: 50%;
+}
+
+.block-col-2 .demonstration {
+  display: block;
+  color: var(--el-text-color-secondary);
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.block-col-2 .el-dropdown-link {
+  display: flex;
+  align-items: center;
 }
 </style>
