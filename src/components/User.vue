@@ -19,6 +19,7 @@
 </template>
 
 <script lang="ts" setup>
+
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import useConfigStore from '@/stores/modules/config'
@@ -159,7 +160,19 @@ const logout = (): void => {
 }
 
 .block-col-2 .el-dropdown-link {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  gap: 4px;
+  /* 图标和文字之间留一点空隙 */
+  font-size: 16px;
+  /* 增大字体 */
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--el-text-color-primary);
+}
+
+.el-dropdown-link .el-icon {
+  font-size: 18px;
+  /* 调整图标大小 */
 }
 </style>
