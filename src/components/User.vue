@@ -3,7 +3,7 @@
     <div class="dropdown" @mouseenter="showDropdownMenu" @mouseleave="hideDropdownMenu">
       <!-- 悬停区域 -->
       <div class="user-name" @click="toggleDropdown" @blur="hideDropdown" tabindex="0">
-        User Name
+        {{ configStore.userInfo }}
       </div>
 
       <!-- 下拉菜单 -->
@@ -23,10 +23,14 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import useConfigStore from '@/stores/modules/config'
 
 defineOptions({
   name: 'User',
 })
+
+// 引入pinia数据
+const configStore = useConfigStore()
 
 // 正确的顺序：先导入，再使用
 const router = useRouter()
