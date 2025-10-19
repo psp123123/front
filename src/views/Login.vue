@@ -25,7 +25,9 @@
 import { ref } from 'vue'
 import { identifyUser } from '@/api/user'
 import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const username = ref('')
 const password = ref('')
 
@@ -48,7 +50,7 @@ const login_btn = async () => {
       localStorage.setItem('accessToken', result.data.accessToken)
 
       // 跳转到home页面
-      window.location.href = '/home'
+      router.push('/home')
     }
   } catch (error) {
     ElMessage.error('登陆失败，请重试')
