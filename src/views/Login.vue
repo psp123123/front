@@ -46,6 +46,9 @@ const login_btn = async () => {
 
       // accessTOken存储到本地
       localStorage.setItem('accessToken', result.data.accessToken)
+
+      // 跳转到home页面
+      window.location.href = '/home'
     }
   } catch (error) {
     ElMessage.error('登陆失败，请重试')
