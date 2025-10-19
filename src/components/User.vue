@@ -1,9 +1,11 @@
 <template>
 
-  <el-col :span="8">
+  <el-col :span="8" class="user-menu">
     <el-dropdown trigger="click">
       <span class="el-dropdown-link">
-        {{ configStore.userInfo }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
+        <img src="/avatar.png" class="avatar-image" alt="avatar" />
+        <span class="username">{{ configStore.userInfo }}</span>
+        <el-icon><arrow-down /></el-icon>
       </span>
       <template #dropdown>
         <el-dropdown-menu>
@@ -152,27 +154,34 @@ const logout = (): void => {
   border-radius: 50%;
 }
 
-.block-col-2 .demonstration {
-  display: block;
-  color: var(--el-text-color-secondary);
-  font-size: 14px;
-  margin-bottom: 20px;
-}
-
-.block-col-2 .el-dropdown-link {
+:deep(.user-menu .el-dropdown-link) {
   display: inline-flex !important;
   align-items: center;
-  gap: 4px;
-  /* 图标和文字之间留一点空隙 */
-  font-size: 16px;
-  /* 增大字体 */
+  justify-content: center;
+  gap: 6px;
+  /* 用户名与箭头的间距 */
+  font-size: 18px;
+  /* 调整整体字体大小 */
   font-weight: 500;
+  line-height: 1;
+  /* 避免换行 */
   cursor: pointer;
   color: var(--el-text-color-primary);
+  vertical-align: middle;
+  /* 保持整体垂直居中 */
 }
 
-.el-dropdown-link .el-icon {
-  font-size: 18px;
-  /* 调整图标大小 */
+:deep(.user-menu .el-dropdown-link .el-icon) {
+  font-size: 16px;
+  /* 图标大小略小一点 */
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
+
+:deep(.avatar-image) {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
 }
 </style>
