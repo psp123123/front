@@ -1,51 +1,67 @@
-// // src/utils/auth.js —— 模拟登录认证
+// 拦截器实现
+import axios from 'axios'
 
-// const TOKEN_KEY = 'admin-token'
+// 创建拦截器实例
+const request = axios.create({
+  baseURL: 'tt-api',
+  timeout: 5000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
 
-// // 模拟合法用户
-// const VALID_USER = {
-//   username: 'admin',
-//   password: '123456',
-// }
+// ---------请求拦截器
+request.interceptors.request.use(
+  (config) => {
+    // 1. 添加token到请求头
+    const token = localStorage.getItem('accessToken')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
 
-// // 生成随机6位验证码（数字+字母）
-// export const generateCaptcha = () => {
-//   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // 排除易混淆字符
-//   let result = ''
-//   for (let i = 0; i < 6; i++) {
-//     result += chars.charAt(Math.floor(Math.random() * chars.length))
-//   }
-//   return result
-// }
+    // 其他动作
 
-// // 登录验证
-// export const login = ({ username, password, captcha }, realCaptcha) => {
-//   // 验证验证码（不区分大小写）
-//   if (captcha.toUpperCase() !== realCaptcha.toUpperCase()) {
-//     return { success: false, message: '验证码错误' }
-//   }
+    // 返回配置对象
+    return config
+  },
+  (error) => {
+    console.error('请求拦截器错误;', error)
+    return Promise.reject(error) // 传递错误给调用者
+  },
+)
 
-//   // 验证用户名密码
-//   if (username === VALID_USER.username && password === VALID_USER.password) {
-//     const token = 'fake-token-' + Date.now()
-//     localStorage.setItem(TOKEN_KEY, token)
-//     return { success: true, token }
-//   } else {
-//     return { success: false, message: '用户名或密码错误' }
-//   }
-// }
+// -------------响应拦截器
+request.interceptors.response.use(
+  (response) => {
+    // 1. 只返回data部分
+    const res = response.data
 
-// // 获取 Token
-// export const getToken = () => {
-//   return localStorage.getItem(TOKEN_KEY)
-// }
+    // 2. 根据后端状态码处理
+    if (res.code !== 200) {
+      console.error('接口错误', res.mesg || '请求失败')
 
-// // 移除 Token（退出登录）
-// export const removeToken = () => {
-//   localStorage.removeItem(TOKEN_KEY)
-// }
+      // 3. 登陆信息失效
+      if (res.code === 400) {
+        // 清除无效token
+        localStorage.removeItem('accessToken')
+        // 跳转登陆页
+        window.location.href = '/login'
+      }
+      return Promise.reject(res)
+    }
+    return res
+  },
+  (error) => {
+    console.error('响应拦截器错误', error.message)
 
-// // 判断是否已登录
-// export const isLogin = () => {
-//   return !!getToken()
-// }
+    if (error.code === 'ECONNABORTED') {
+      console.error('请求超时，请重试')
+    } else if (!window.navigator.onLine) {
+      console.error('网络已断开，请检查网络')
+    }
+
+    return Promise.reject(error)
+  },
+)
+
+export default request

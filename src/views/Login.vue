@@ -29,10 +29,10 @@ import { ElMessage } from 'element-plus'
 const username = ref('')
 const password = ref('')
 
-// 验证用户名及密码
-// 登陆跳转到/或/home路径
+// 发送用户名及密码
 // 发送请求到服务端，获取access Token和refresh Token
 // 获取到的token存放客户端相应位置
+// 登陆跳转到/或/home路径
 const login_btn = async () => {
   console.log("username:", username.value, "passwd:", password.value)
   try {
@@ -43,7 +43,9 @@ const login_btn = async () => {
     if (result.code === 200) {
       ElMessage.success("登陆成功")
       console.log("accessToken:", result.data.accessToken)
-      localStorage.setItem('token', result.data.accessToken)
+
+      // accessTOken存储到本地
+      localStorage.setItem('accessToken', result.data.accessToken)
     }
   } catch (error) {
     ElMessage.error('登陆失败，请重试')
