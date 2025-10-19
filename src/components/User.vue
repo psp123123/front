@@ -160,7 +160,7 @@ const logout = (): void => {
 }
 
 .block-col-2 .el-dropdown-link {
-  display: inline-flex;
+  display: inline-flex !important;
   align-items: center;
   gap: 4px;
   /* 图标和文字之间留一点空隙 */
