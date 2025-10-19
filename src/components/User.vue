@@ -3,7 +3,6 @@
   <el-col :span="8">
     <el-dropdown trigger="click">
       <span class="el-dropdown-link">
-        <img src="/avatar.png" class="avatar-image" alt="avatar" />
         <span class="username">{{ configStore.userInfo }}</span>
         <el-icon><arrow-down /></el-icon>
       </span>
