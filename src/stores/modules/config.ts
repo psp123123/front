@@ -32,7 +32,7 @@ export function filterMenu(routes: RouteItem[]): RouteItem[] {
     })
 }
 
-let useConfigStore = defineStore('config', {
+export const useConfigStore = defineStore('config', {
   state: () => {
     return {
       //Token: 'Token Admin', // 后续需要处理
