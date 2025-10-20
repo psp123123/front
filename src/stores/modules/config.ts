@@ -1,6 +1,11 @@
 // 引入pinia
 import { defineStore } from 'pinia'
 import { constantroutes } from '@/router/route'
+// 引入路由组件
+import { useRoute } from 'vue-router'
+
+// 使用路由组件
+const route = useRoute()
 
 export interface RouteItem {
   path: string
@@ -8,6 +13,7 @@ export interface RouteItem {
   meta?: {
     title?: string
     hidden?: boolean
+    manager?: boolean
   }
   children?: RouteItem[]
 }
@@ -20,16 +26,32 @@ export interface UserInfo {
   avatar: string
 }
 export function filterMenu(routes: RouteItem[]): RouteItem[] {
-  return routes
-    .filter((route) => !route.meta?.hidden) // 过滤隐藏项
-    .map((route) => {
-      const temp = { ...route }
-      if (route.children) {
-        temp.children = filterMenu(route.children)
-      }
+  // 递归单个路由项，返回bool表示是否保留该路由
+  function shouldKeepRoute(route: RouteItem): boolean {
+    const routeMeta = route.meta || {}
 
-      return temp
-    })
+    // 判断如果是/manager路由时
+    const isManagerRelated = route.path === '/manager' || route.path.startsWith('/manager/')
+
+    if (isManagerRelated) {
+      return routeMeta.manager === true
+    } else {
+      return routeMeta.hidden !== true
+    }
+  }
+  return (
+    routes
+      // .filter((route) => !route.meta?.hidden) // 过滤隐藏项
+      .filter((route) => shouldKeepRoute(route))
+      .map((route) => {
+        const temp = { ...route }
+        if (route.children) {
+          temp.children = filterMenu(route.children)
+        }
+
+        return temp
+      })
+  )
 }
 
 let useConfigStore = defineStore('config', {

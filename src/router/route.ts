@@ -39,7 +39,7 @@ export const constantroutes = [
     path: '/manager',
     component: () => import('@/components/UserManageBar.vue'), // 添加布局组件
     name: 'user',
-    meta: { title: 'manager', hidden: true },
+    meta: { title: 'manager', hidden: true, manager: true },
     children: [
       {
         path: '',
