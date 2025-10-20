@@ -31,7 +31,7 @@ const router = useRouter()
 // 使用存储在pinia中的数据
 const config = useConfigStore()
 
-const username = config.username
+const username = config.userInfo.username
 console.log('username:', username)
 
 
