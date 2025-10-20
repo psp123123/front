@@ -53,6 +53,8 @@ const login_btn = async () => {
 
       // 登陆用户信息写入pinia中
       storeInfo.setUser(result.data as UserInfo)
+
+      console.log('pinia存入数据', result.data)
       // 跳转到home页面
       router.push('/home')
     }

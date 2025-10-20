@@ -32,6 +32,7 @@ const router = useRouter()
 const config = useConfigStore()
 
 const username = config.username
+console.log('username:', username)
 
 
 
