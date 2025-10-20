@@ -26,7 +26,7 @@ import { ref } from 'vue'
 import { identifyUser } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-import useConfigStore from '@/stores/modules/config'
+import useConfigStore, { type UserInfo } from '@/stores/modules/config'
 
 const router = useRouter()
 const username = ref('')
@@ -52,7 +52,7 @@ const login_btn = async () => {
       localStorage.setItem('accessToken', result.data.accessToken)
 
       // 登陆用户信息写入pinia中
-      storeInfo.setUser(result.data.username)
+      storeInfo.setUser(result.data as UserInfo)
       // 跳转到home页面
       router.push('/home')
     }
