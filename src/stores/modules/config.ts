@@ -25,36 +25,22 @@ export interface UserInfo {
   nickname: string
   avatar: string
 }
-export function filterMenu(routes: RouteItem[]): RouteItem[] {
-  // 递归单个路由项，返回bool表示是否保留该路由
+export function filterMenu(routes: RouteItem[] = [], parentPath = ''): RouteItem[] {
   function shouldKeepRoute(route: RouteItem): boolean {
     const routeMeta = route.meta || {}
-    // 1. 打印当前处理的路由基本信息（路径、名称）
-    console.log('------------------------------')
-    console.log('正在处理路由:')
-    console.log('path:', route.path)
-    console.log('name:', route.name || '无名称')
-    console.log('meta:', routeMeta) // 打印完整的meta信息
+    // 生成当前路由的完整绝对路径（父路径 + 当前路径）
+    const fullPath = parentPath ? `${parentPath}/${route.path}` : route.path
+    console.log('当前路由完整路径:', fullPath) // 调试：查看完整路径
 
-    // 判断如果是/manager路由时
-    const isManagerRelated = route.path === '/manager' || route.path.startsWith('/manager/')
+    // 基于完整路径判断是否为manager相关
+    const isManagerRelated = fullPath === '/manager' || fullPath.startsWith('/manager/')
     console.log('是否为manager相关路由:', isManagerRelated)
-    let result: boolean // 存储判断结果
 
     if (isManagerRelated) {
-      result = routeMeta.manager === true
-      console.log(
-        `manager路由判断: meta.manager=${routeMeta.manager} → ${result ? '保留' : '过滤'}`,
-      )
-      // return routeMeta.manager === true
+      return routeMeta.manager === true
     } else {
-      // return routeMeta.hidden !== true
-      result = routeMeta.hidden !== true
-      console.log(
-        `非manager路由判断: meta.hidden=${routeMeta.hidden} → ${result ? '保留' : '过滤'}`,
-      )
+      return routeMeta.hidden !== true
     }
-    return result
   }
   return (
     routes
