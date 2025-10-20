@@ -70,6 +70,6 @@ function redickHome() {
   display: flex;
   align-items: center;
   gap: 12px;
-  white-space: nowrap;
+  /* white-space: nowrap; */
 }
 </style>

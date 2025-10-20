@@ -11,6 +11,14 @@ export interface RouteItem {
   }
   children?: RouteItem[]
 }
+
+interface UserInfo {
+  accessToken: string
+  username: string
+  userID: string
+  nickname: string
+  avatar: string
+}
 export function filterMenu(routes: RouteItem[]): RouteItem[] {
   return routes
     .filter((route) => !route.meta?.hidden) // 过滤隐藏项
@@ -27,16 +35,16 @@ export function filterMenu(routes: RouteItem[]): RouteItem[] {
 let useConfigStore = defineStore('config', {
   state: () => {
     return {
-      Token: 'Token Admin', // 后续需要处理
+      //Token: 'Token Admin', // 后续需要处理
       menuList: filterMenu(constantroutes),
-      userInfo: null as string | null,
+      userInfo: null as UserInfo | null,
     }
   },
 
   // actions
   actions: {
-    setUser(user: string) {
-      this.userInfo = user
+    setUser(userinfo: UserInfo) {
+      this.userInfo = userinfo
     },
   },
   getters: {},

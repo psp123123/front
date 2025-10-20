@@ -1,79 +1,96 @@
 <template>
+  <el-dropdown placement="bottom-end">
+    <!-- 用户信息按钮 -->
+    <div class="user-info">
+      <span class="username">{{ username }}</span>
+      <el-avatar class="avatar" size="small" type="text"
+        src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+    </div>
 
-  <el-col :span="8">
-    <el-dropdown trigger="click">
-      <span class="el-dropdown-link">
-        <!-- <span class="username">{{ configStore.userInfo }} </span> -->
-        <span class="username">admin </span><el-icon><arrow-down /></el-icon>
-      </span>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item :icon="Plus" @click="account">账户</el-dropdown-item>
-          <el-dropdown-item :icon="CirclePlusFilled">
-            登出
-          </el-dropdown-item>
-
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-  </el-col>
+    <!-- 下拉菜单 -->
+    <template #dropdown>
+      <el-dropdown-menu class="dark-dropdown">
+        <el-dropdown-item @click="goAccount">账号密码</el-dropdown-item>
+        <el-dropdown-item divided @click="logout">注销</el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
+  </el-dropdown>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import useConfigStore from '@/stores/modules/config'
-import {
-  ArrowDown,
-  Check,
-  CircleCheck,
-  CirclePlus,
-  CirclePlusFilled,
-  Plus,
-} from '@element-plus/icons-vue'
+// 引入pinia存储
+import { useConfig } from '@/stores/modules/config'
 
-defineOptions({
-  name: 'User',
-})
 
-// 引入pinia数据
-const configStore = useConfigStore()
-console.log('当前登陆用户:', configStore.userInfo)
 
-// 正确的顺序：先导入，再使用
+
+
 const router = useRouter()
+// 使用存储在pinia中的数据
+const config = useConfig()
 
-function account() {
-  console.log('prepare redict')
-  router
-    .push('/manager')
-    .then(() => console.log('跳转成功'))
-    .catch((err) => console.error('跳转失败', err))
+const username = config.username
 
+
+
+
+
+
+
+
+
+const goAccount = () => router.push('/account')
+const logout = () => {
+  localStorage.removeItem('accessToken')
+  router.push('/login')
 }
-
-
-
 </script>
 
 <style scoped>
-.block-col-2 .demonstration {
-  display: block;
-  color: var(--el-text-color-secondary);
-  font-size: 14px;
-  margin-bottom: 20px;
-}
-
-.block-col-2 .el-dropdown-link {
+/* 顶部栏背景假设是深色，比如 #2c3e50 */
+.user-info {
   display: flex;
   align-items: center;
-  width: 100px;
+  gap: 8px;
+  color: #fff;
+  cursor: pointer;
+  padding: 6px 10px;
+  border: 0;
+  outline: none;
 }
 
-.el-dropdown-menu .el-dropdown-item {
-  font-size: 160px;
-  background-color: brown;
-  /* 根据需要调整大小，比如16px、18px等 */
+.username {
+  font-weight: bold;
+  font-size: 14px;
+  color: #fff;
+}
+
+.avatar {
+  border: 1px solid #fff;
+}
+
+/* --- 下拉菜单样式 --- */
+.dark-dropdown {
+  /* background-color: #2c3e50 !important; */
+  /* border: none !important; */
+  width: 100px;
+  min-width: 100px;
+  padding: 4px 0;
+  text-align: center;
+  border-radius: 6px;
+}
+
+/* 菜单项样式 */
+.dark-dropdown .el-dropdown-menu__item {
+  color: #fff !important;
+  font-weight: 600;
+  justify-content: center;
+}
+
+.dark-dropdown .el-dropdown-menu__item:hover {
+  /* background-color: #3d566e !important; */
+  color: #fff;
 }
 </style>

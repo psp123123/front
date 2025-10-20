@@ -16,6 +16,7 @@ interface LoginResponse {
     username: string
     userID: string
     nickname: string
+    avatar: string
   }
   message: string
 }
