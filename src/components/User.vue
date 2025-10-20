@@ -21,7 +21,7 @@
 
 import { useRouter } from 'vue-router'
 // 引入pinia存储
-import useConfigStore from '@/stores/modules/config'
+import { useConfigStore } from '@/stores/modules/config'
 
 
 
