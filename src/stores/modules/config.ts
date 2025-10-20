@@ -12,7 +12,7 @@ export interface RouteItem {
   children?: RouteItem[]
 }
 
-interface UserInfo {
+export interface UserInfo {
   accessToken: string
   username: string
   userID: string | number

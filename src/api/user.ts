@@ -1,7 +1,7 @@
 // 向后端交互
 // axios全局默认值
 import axios from 'axios'
-
+import type { UserInfo } from '@/stores/modules/config'
 // 定义表单类型
 interface LoginParams {
   username: string
@@ -11,13 +11,7 @@ interface LoginParams {
 // 定义接口返回数据类型
 interface LoginResponse {
   code: number
-  data: {
-    accessToken: string
-    username: string
-    userID: string
-    nickname: string
-    avatar: string
-  }
+  data: UserInfo
   message: string
 }
 
