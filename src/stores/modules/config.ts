@@ -71,12 +71,26 @@ export function filterMenu(routes: RouteItem[]): RouteItem[] {
   )
 }
 
+// 结合当前路由路径过滤
+function filterMenuWithCurrentRoute(routes: RouteItem[], currentPath: string): RouteItem[] {
+  const filteredByMeta = filterMenu(routes)
+
+  // 根据当前路径判断是否需要只显示/manger的子菜单
+  const isInManagerRoute = currentPath.startsWith('mangaer')
+  if (isInManagerRoute) {
+    const managerRoute = filteredByMeta.find((item) => item.path === '/manager')
+    return managerRoute?.children || []
+  } else {
+    return filteredByMeta.filter((item) => item.path !== '/manager')
+  }
+}
 let useConfigStore = defineStore('config', {
   state: () => {
     return {
       //Token: 'Token Admin', // 后续需要处理
       menuList: filterMenu(constantroutes),
       userInfo: null as UserInfo | null,
+      rowRoutes: constantroutes,
     }
   },
 
@@ -86,7 +100,12 @@ let useConfigStore = defineStore('config', {
       this.userInfo = userinfo
     },
   },
-  getters: {},
+  getters: {
+    dynamicMenuList(): RouteItem[] {
+      const route = useRoute() // 获取当前路由
+      return filterMenuWithCurrentRoute(this.rowRoutes, route.path)
+    },
+  },
 })
 
 export default useConfigStore
