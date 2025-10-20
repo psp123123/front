@@ -8,7 +8,7 @@
       <HeadBar class="head-bar" />
       <div class="layout-content">
         <el-menu class="menu-bar">
-          <component :menuList="useConfig.menuList" :key="route.path" />
+          <MenuBar :menuList="useConfig.menuList" :key="route.path" />
         </el-menu>
 
         <div class="content-area">
@@ -23,6 +23,7 @@
 import { computed, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import HeadBar from './components/HeadBar.vue'
+import MenuBar from './components/MenuBar.vue'
 import useConfigStore from './stores/modules/config'
 
 const useConfig = useConfigStore()
