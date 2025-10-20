@@ -8,7 +8,7 @@
       <HeadBar class="head-bar" />
       <div class="layout-content">
         <el-menu class="menu-bar">
-          <MenuBar :menuList="useConfig.menuList" :key="route.path" />
+          <MenuBar :menuList="dynamicMenuList" :key="route.path" />
         </el-menu>
 
         <div class="content-area">
@@ -37,6 +37,7 @@ const shouldHideLayout = computed(() => route.meta.hideLayout === true || route.
 
 // 动态菜单，路由变化时，会自动重新计算
 const dynamicMenuList = computed(() => useConfig.dynamicMenuList)
+console.log('动态菜单:', dynamicMenuList)
 
 onMounted(async () => {
   await router.isReady()
