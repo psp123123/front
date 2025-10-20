@@ -21,7 +21,7 @@
 
 import { useRouter } from 'vue-router'
 // 引入pinia存储
-import { useConfig } from '@/stores/modules/config'
+import { useConfigStore } from '@/stores/modules/config'
 
 
 
@@ -29,7 +29,7 @@ import { useConfig } from '@/stores/modules/config'
 
 const router = useRouter()
 // 使用存储在pinia中的数据
-const config = useConfig()
+const config = useConfigStore()
 
 const username = config.username
 
