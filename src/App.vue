@@ -1,14 +1,16 @@
 <template>
-  <div v-if="routerReady" class="app-container">
+  <div class="app-container" v-show="routerReady">
+    <!-- 登录页或隐藏布局 -->
     <router-view v-if="shouldHideLayout" />
 
+    <!-- 主布局 -->
     <div v-else class="main-layout">
       <HeadBar class="head-bar" />
-
       <div class="layout-content">
         <el-menu class="menu-bar">
-          <MenuBar :menuList="useConfig.menuList"></MenuBar>
+          <component :is="currentSidebar" :menuList="useConfig.menuList" :key="route.path" />
         </el-menu>
+
         <div class="content-area">
           <router-view />
         </div>
@@ -18,32 +20,45 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, onBeforeMount } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import HeadBar from './components/HeadBar.vue'
 import MenuBar from './components/MenuBar.vue'
-
-// 引入路由的pinia数据
+import SettingBar from '@/components/Setting.vue'
 import useConfigStore from './stores/modules/config'
-const useConfig = useConfigStore()
 
+const useConfig = useConfigStore()
 const route = useRoute()
 const router = useRouter()
 
 const routerReady = ref(false)
+
+// 判断是否隐藏布局（登录页或特殊页面）
 const shouldHideLayout = computed(() => route.meta.hideLayout === true || route.path === '/login')
 
-// const currentMenuBar = computed(() => {
-//   return route.path === '/manager' ? UserManageMenuBar : MenuBar
-// })
 
-onBeforeMount(async () => {
+
+// 动态返回侧边栏组件
+const currentSidebar = computed(() => {
+  if (route.path === '/manager') {
+    return SettingBar
+  }
+  return MenuBar
+})
+
+onMounted(async () => {
   await router.isReady()
   routerReady.value = true
 })
 </script>
 
 <style scoped>
+:root {
+  --primary-bg: #797be2;
+  --menu-bg: #b2b2d6;
+  --content-bg: #f5f5f5;
+}
+
 .app-container {
   height: 100vh;
   overflow: hidden;
@@ -56,9 +71,7 @@ onBeforeMount(async () => {
 }
 
 .head-bar {
-  height: 70px;
   flex-shrink: 0;
-  background: #fff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -66,16 +79,14 @@ onBeforeMount(async () => {
   display: flex;
   flex: 1;
   overflow: hidden;
-  /* width: 3000px; */
-  background-color: #797be2;
+  background-color: var(--primary-bg);
 }
 
 .menu-bar {
   width: 170px;
   flex-shrink: 0;
-  background-color: #b2b2d6;
+  background-color: var(--menu-bg);
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
-  /* border-top-right-radius: 16px; */
   padding-top: 32px;
 }
 
@@ -83,6 +94,6 @@ onBeforeMount(async () => {
   flex: 1;
   overflow-y: auto;
   padding: 24px;
-  background: #f5f5f5;
+  background-color: var(--content-bg);
 }
 </style>

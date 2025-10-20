@@ -2,12 +2,7 @@
   <div class="head-bar">
     <div class="container">
       <div class="logo">
-        <img
-          src="../assets/logo.png"
-          alt="FleetPilot Logo"
-          class="logo-image"
-          @click="redickHome"
-        />
+        <img src="../assets/logo.png" alt="FleetPilot Logo" class="logo-image" @click="redickHome" />
       </div>
       <div class="center-section">
         <h1>FleetPilot</h1>
@@ -33,9 +28,9 @@ function redickHome() {
 <style scoped>
 .head-bar {
   width: 100%;
-  height: 70px;
+  height: 50px;
   /* background: linear-gradient(to right, #fff 20%, #797be2 50%, #fff 80%); */
-  background: linear-gradient(to right, #fff 20%, #babbec 50%);
+  background: linear-gradient(to right, #fff 20%, #8fe076 50%);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
@@ -75,5 +70,6 @@ function redickHome() {
   display: flex;
   align-items: center;
   gap: 12px;
+  white-space: nowrap;
 }
 </style>
