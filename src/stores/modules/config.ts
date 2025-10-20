@@ -15,7 +15,7 @@ export interface RouteItem {
 interface UserInfo {
   accessToken: string
   username: string
-  userID: string
+  userID: string | number
   nickname: string
   avatar: string
 }
