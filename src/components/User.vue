@@ -41,7 +41,7 @@ const username = config.userInfo.username
 
 
 
-const goAccount = () => router.push('/account')
+const goAccount = () => router.push('/manager')
 const logout = () => {
   localStorage.removeItem('accessToken')
   router.push('/login')
