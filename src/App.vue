@@ -35,7 +35,8 @@ const routerReady = ref(false)
 // 判断是否隐藏布局（登录页或特殊页面）
 const shouldHideLayout = computed(() => route.meta.hideLayout === true || route.path === '/login')
 
-
+// 动态菜单，路由变化时，会自动重新计算
+const dynamicMenuList = computed(() => useConfig.dynamicMenuList)
 
 onMounted(async () => {
   await router.isReady()
