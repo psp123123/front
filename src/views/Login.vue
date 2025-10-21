@@ -29,8 +29,8 @@ import { useRouter } from 'vue-router'
 import useConfigStore, { type UserInfo } from '@/stores/modules/config'
 
 const router = useRouter()
-const username = ref('')
-const password = ref('')
+const username = ref('admin')
+const password = ref('admin')
 const storeInfo = useConfigStore()
 
 // 发送用户名及密码

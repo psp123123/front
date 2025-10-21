@@ -22,6 +22,7 @@
 import { useRouter } from 'vue-router'
 // 引入pinia存储
 import useConfigStore from '@/stores/modules/config'
+import { onMounted } from 'vue'
 
 
 
@@ -34,12 +35,13 @@ const config = useConfigStore()
 const username = config.userInfo.username
 
 
-
+onMounted(() => { console.log('default routes are:', config.menuList) })
 
 const goAccount = () => {
   const managerMenu = config.generateManagerMenu()
   console.log('跳转时获取路由信息,并设置set MenuList', managerMenu)
-  config.setMenuList(managerMenu)
+  config.setMenuList([managerMenu])
+  console.log('default routes are:', config.menuList)
   // 跳转
   router.push('/manager')
 }

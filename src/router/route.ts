@@ -43,7 +43,7 @@ export const constantroutes = [
     children: [
       {
         path: '',
-        redirect: { name: 'edituser', hidden: true }, // 默认重定向
+        redirect: { name: 'edituser', hidden: false }, // 默认重定向
         meta: {
           title: 'default',
           manager: true,
@@ -56,7 +56,7 @@ export const constantroutes = [
         meta: {
           requiresAuth: true, // 修正拼写
           title: 'Edit User',
-          hidden: true,
+          hidden: false,
           manager: true,
         },
       },
@@ -67,7 +67,7 @@ export const constantroutes = [
         meta: {
           requiresAuth: true, // 建议也添加权限验证
           title: 'Edit Password',
-          hidden: true,
+          hidden: false,
           manager: true,
         },
       },

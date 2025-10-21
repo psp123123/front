@@ -39,6 +39,28 @@ export function filterMenu(routes: RouteItem[] = []): RouteItem[] {
     })
 }
 
+export function filterMenuManager(routes: RouteItem[] = []): RouteItem[] {
+  return (
+    routes
+      // .filter((route) => !route.meta?.hidden) // 过滤隐藏项
+      .filter((route) => {
+        // 特殊处理：manager 路由即使 hidden 也要保留
+        if (route.meta?.manager) {
+          return true
+        }
+        return !route.meta?.hidden
+      })
+      .map((route) => {
+        const temp = { ...route }
+        if (route.children) {
+          temp.children = filterMenuManager(route.children)
+        }
+
+        console.log('此时的路由信息：', temp)
+        return temp
+      })
+  )
+}
 let useConfigStore = defineStore('config', {
   state: () => {
     return {
@@ -57,7 +79,7 @@ let useConfigStore = defineStore('config', {
 
     // 设置菜单，在触发器使用
     setMenuList(menu: any[]) {
-      this.menuList = menu
+      this.menuList = filterMenuManager(menu)
     },
 
     // 从静态路由中提取manager菜单
