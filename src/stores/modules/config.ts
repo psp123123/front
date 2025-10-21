@@ -34,6 +34,7 @@ export function filterMenu(routes: RouteItem[] = []): RouteItem[] {
         temp.children = filterMenu(route.children)
       }
 
+      console.log('此时的路由信息：', temp)
       return temp
     })
 }
