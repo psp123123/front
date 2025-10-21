@@ -38,7 +38,7 @@ const username = config.userInfo.username
 
 const goAccount = () => {
   const managerMenu = config.generateManagerMenu()
-  console.log('跳转时获取路由信息,并设置setMenuList', managerMenu)
+  console.log('跳转时获取路由信息,并设置set MenuList', managerMenu)
   config.setMenuList(managerMenu)
   // 跳转
   router.push('/manager')
