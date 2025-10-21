@@ -41,7 +41,13 @@ const username = config.userInfo.username
 
 
 
-const goAccount = () => router.push('/manager')
+const goAccount = () => {
+  const managerMenu = config.generateManagerMenu()
+  console.log('跳转时获取路由信息', managerMenu)
+
+  // 跳转
+  router.push('/manager')
+}
 const logout = () => {
   localStorage.removeItem('accessToken')
   router.push('/login')
