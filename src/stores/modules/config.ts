@@ -63,7 +63,7 @@ let useConfigStore = defineStore('config', {
     generateManagerMenu() {
       const managerRoute = constantroutes.find((r) => r.path === '/manager')
       if (!managerRoute || !managerRoute.children) return []
-
+      console.log('获取到的路由信息', managerRoute)
       return managerRoute
     },
   },
