@@ -53,6 +53,19 @@ let useConfigStore = defineStore('config', {
     setUser(userinfo: UserInfo) {
       this.userInfo = userinfo
     },
+
+    // 设置菜单，在触发器使用
+    setMenuList(menu: any[]) {
+      this.menuList = menu
+    },
+
+    // 从静态路由中提取manager菜单
+    generateManagerMenu() {
+      const managerRoute = constantroutes.find((r) => r.path === '/manager')
+      if (!managerRoute || !managerRoute.children) return []
+
+      return managerRoute
+    },
   },
   getters: {},
 })
