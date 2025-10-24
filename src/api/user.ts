@@ -52,7 +52,7 @@ export async function identifyUser(params: LoginParams): Promise<LoginResponse> 
 export async function getUserInfo(): Promise<UserInfoResponse> {
   // 使用request拦截器携带token信息请求/userinfo接口
   try {
-    const response = await request.get('/tt-api/userinfo')
+    const response = await request.get('/userinfo')
     console.log('get server data :', request)
     return response.data
   } catch (error) {

@@ -22,7 +22,9 @@
 import { useRouter } from 'vue-router'
 // 引入pinia存储
 import useConfigStore from '@/stores/modules/config'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+// 引入request拦截器
+import { getUserInfo } from '@/api/user'
 
 
 
@@ -31,11 +33,29 @@ import { onMounted } from 'vue'
 const router = useRouter()
 // 使用存储在pinia中的数据
 const config = useConfigStore()
+const username = ref('')
 
-const username = config.userInfo.username
 
 
-onMounted(() => { console.log('default routes are:', config.menuList) })
+
+
+// 组件初始化即获取用户信息
+onMounted(async () => {
+  // 如果可以获取到pinia中的信息，则使用pinia
+  if (config.userInfo?.username) {
+    username.value = config.userInfo?.username
+    console.warn('user get error:', username)
+
+  } else {
+    // 否则从后端获取数据
+    const userinfo = await getUserInfo()
+    console.log('get from server userinfo:', userinfo)
+    console.log('get default user: guest')
+    username.value = 'guest'
+  }
+
+
+})
 
 const goAccount = () => {
   const managerMenu = config.generateManagerMenu()
