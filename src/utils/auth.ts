@@ -35,7 +35,7 @@ request.interceptors.response.use(
   (response) => {
     // 1. 只返回data部分
     const res = response.data
-
+    console.log('get code from server ', res)
     // 2. 根据后端状态码处理
     if (res.code !== 200) {
       console.error('接口错误', res.mesg || '请求失败')
