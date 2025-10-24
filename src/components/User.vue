@@ -41,20 +41,24 @@ const username = ref('')
 
 // 组件初始化即获取用户信息
 onMounted(async () => {
-  // 如果可以获取到pinia中的信息，则使用pinia
-  if (config.userInfo?.username) {
-    username.value = config.userInfo?.username
-    console.warn('user get error:', username)
+  try {
+    // 如果可以获取到pinia中的信息，则使用pinia
+    if (config.userInfo?.username) {
+      username.value = config.userInfo?.username
+      console.warn('user get error:', username)
 
-  } else {
-    // 否则从后端获取数据
-    const userinfo = await getUserInfo()
-    console.log('get from server userinfo:', userinfo)
-    console.log('get default user: guest')
+    } else {
+      // 否则从后端获取数据
+      const userinfo = await getUserInfo()
+      console.log('get from server userinfo:', userinfo)
+      username = userinfo.data?.username
+    }
+
+
+  } catch (error) {
+    console.error('get username error:', error)
     username.value = 'guest'
   }
-
-
 })
 
 const goAccount = () => {
