@@ -38,7 +38,7 @@ request.interceptors.response.use(
     console.log('get code from server ', res, response)
     // 2. 根据后端状态码处理
     if (response.status !== 200) {
-      console.error('接口错误', res.mesg || '请求失败')
+      console.error('接口错误', res.msg || '请求失败')
 
       // 3. 登陆信息失效
       if (response.status === 400) {
