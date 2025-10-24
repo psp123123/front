@@ -57,7 +57,7 @@ onMounted(async () => {
 
   } catch (error) {
     console.error('get username error:', error)
-    username.value = 'guest'
+    router.push('/login')
   }
 })
 
