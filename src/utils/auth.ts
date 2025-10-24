@@ -33,7 +33,7 @@ request.interceptors.request.use(
 // -------------响应拦截器
 request.interceptors.response.use(
   (response) => {
-    console.log('get code from server ', response)
+    console.log('get code from server ', response.status)
     // 2. 根据后端状态码处理
     if (response.status !== 200) {
       console.error('接口错误', response.data.msg || '请求失败')
