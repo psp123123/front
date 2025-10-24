@@ -33,12 +33,10 @@ request.interceptors.request.use(
 // -------------响应拦截器
 request.interceptors.response.use(
   (response) => {
-    // 1. 只返回data部分
-    const res = response.data
-    console.log('get code from server ', res, response)
+    console.log('get code from server ', response)
     // 2. 根据后端状态码处理
     if (response.status !== 200) {
-      console.error('接口错误', res.msg || '请求失败')
+      console.error('接口错误', response.data.msg || '请求失败')
 
       // 3. 登陆信息失效
       if (response.status === 400) {
@@ -47,9 +45,9 @@ request.interceptors.response.use(
         // 跳转登陆页
         window.location.href = '/login'
       }
-      return Promise.reject(res)
+      return Promise.reject(response)
     }
-    return res
+    return response
   },
   (error) => {
     console.error('响应拦截器错误', error.message)

@@ -53,7 +53,7 @@ export async function getUserInfo(): Promise<UserInfoResponse> {
   // 使用request拦截器携带token信息请求/userinfo接口
   try {
     const response = await request.get('/api/userinfo')
-    console.log('get server data :', response)
+    console.log('get server data :', response.data)
     return response.data
   } catch (error) {
     console.error(error)
