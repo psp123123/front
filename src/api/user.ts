@@ -56,7 +56,7 @@ export async function getUserInfo(): Promise<UserInfoResponse> {
     console.log('get server data :', response.data)
     return response.data
   } catch (error) {
-    console.error(error)
+    console.error('getUserInfo run error', error)
     throw error
   }
 
