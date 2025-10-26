@@ -11,6 +11,7 @@ const Router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: constantroutes,
 })
+export default Router
 
 // // 全局前置守卫
 // Router.beforeEach((to, from, next) => {
@@ -43,4 +44,4 @@ const beforeEachRouter = Router.beforeEach((to, from, next) => {
   next()
 })
 
-export default beforeEachRouter
+// export default beforeEachRouter
