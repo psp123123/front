@@ -34,7 +34,6 @@ export function filterMenu(routes: RouteItem[] = []): RouteItem[] {
         temp.children = filterMenu(route.children)
       }
 
-      console.log('此时的路由信息：', temp)
       return temp
     })
 }
@@ -55,8 +54,6 @@ export function filterMenuManager(routes: RouteItem[] = []): RouteItem[] {
         if (route.children) {
           temp.children = filterMenuManager(route.children)
         }
-
-        console.log('此时的路由信息：', temp)
         return temp
       })
   )
