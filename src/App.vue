@@ -36,7 +36,7 @@ const routerReady = ref(false)
 const shouldHideLayout = computed(() => route.meta.hideLayout === true || route.path === '/login')
 
 // 判断路由
-
+console.log('app.vue中，获取到的路由信息：', useConfig.menuList)
 
 onMounted(async () => {
   await router.isReady()

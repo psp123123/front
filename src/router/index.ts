@@ -40,8 +40,6 @@ export const beforeEachRouter = Router.beforeEach((to, from, next) => {
     configStore.setMenuList([managerMenu])
   } else {
     const x = configStore.setMenuList(configStore.rowRoutes)
-    console.log('-------------------记录路由 ', x)
-    console.log('------------------此时的pinia的信息', configStore.menuList)
   }
   next()
 })
