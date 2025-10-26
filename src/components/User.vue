@@ -45,13 +45,13 @@ onMounted(async () => {
     // 如果可以获取到pinia中的信息，则使用pinia
     if (config.userInfo?.username) {
       username.value = config.userInfo?.username
-      console.warn('user get error:', username)
+      console.log('从pinia中获取用户信息:', username.value)
 
     } else {
       // 否则从后端获取数据
       const userinfo = await getUserInfo()
       console.log('get from server userinfo:', userinfo)
-      username = userinfo.user
+      username.value = userinfo.user
     }
 
 
