@@ -84,6 +84,7 @@ let useConfigStore = defineStore('config', {
       const managerRoute = constantroutes.find((r) => r.path === '/manager')
       if (!managerRoute || !managerRoute.children) return []
       console.log('获取到的路由信息', managerRoute)
+      console.log('此时的pinia的数据', this.menuList)
       return managerRoute
     },
   },

@@ -30,18 +30,20 @@ export default Router
 //   //   next()
 //   // }
 // })
-const beforeEachRouter = Router.beforeEach((to, from, next) => {
-  const configStore = useConfigStore()
+// const beforeEachRouter = Router.beforeEach((to, from, next) => {
+//   const configStore = useConfigStore()
 
-  console.log('跳转前的路由信息：', from.path)
-  //如果进入/manager路由时
-  if (to.path.startsWith('/manager')) {
-    const managerMenu = configStore.generateManagerMenu()
-    configStore.setMenuList([managerMenu])
-  } else {
-    const x = configStore.setMenuList(configStore.rowRoutes)
-  }
-  next()
-})
+//   console.log('跳转前的路由信息：', from.path)
+//   //如果进入/manager路由时
+//   if (to.path.startsWith('/manager')) {
+//     const managerMenu = configStore.generateManagerMenu()
+//     configStore.setMenuList([managerMenu])
+//   } else {
+//     const x = configStore.setMenuList(configStore.rowRoutes)
+//     console.log('-------------------记录路由 ', x)
+//     console.log('------------------此时的pinia的信息', configStore.menuList)
+//   }
+//   next()
+// })
 
 // export default beforeEachRouter
