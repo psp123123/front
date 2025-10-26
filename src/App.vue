@@ -8,7 +8,8 @@
       <HeadBar class="head-bar" />
       <div class="layout-content">
         <el-menu class="menu-bar">
-          <MenuBar :menuList="useConfig.menuList" :key="route.path" />
+          <!-- <MenuBar :menuList="useConfig.menuList" :key="route.path" /> -->
+          <MenuBar :key="route.path" />
         </el-menu>
 
         <div class="content-area">
