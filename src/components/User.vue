@@ -61,14 +61,17 @@ onMounted(async () => {
   }
 })
 
-const goAccount = () => {
-  const managerMenu = config.generateManagerMenu()
-  console.log('跳转时获取路由信息,并设置set MenuList', managerMenu)
-  config.setMenuList([managerMenu])
-  console.log('default routes are:', config.menuList)
-  // 跳转
-  router.push('/manager')
-}
+// const goAccount = () => {
+//   const managerMenu = config.generateManagerMenu()
+//   console.log('跳转时获取路由信息,并设置set MenuList', managerMenu)
+//   config.setMenuList([managerMenu])
+//   console.log('default routes are:', config.menuList)
+//   // 跳转
+//   router.push('/manager')
+// }
+
+// 监视路由变化
+
 const logout = () => {
   localStorage.removeItem('accessToken')
   router.push('/login')

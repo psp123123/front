@@ -4,6 +4,9 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 import { constantroutes } from '@/router/route'
 
+// 引入pinia的信息
+import useConfigStore from '@/stores/modules/config'
+
 const Router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: constantroutes,
@@ -26,5 +29,17 @@ const Router = createRouter({
 //   //   next()
 //   // }
 // })
+const beforeEachRouter = Router.beforeEach((to, from, next) => {
+  const configStore = useConfigStore()
 
-export default Router
+  //如果进入/manager路由时
+  if (to.path.startsWith('/manager')) {
+    const managerMenu = configStore.generateManagerMenu()
+    configStore.setMenuList([managerMenu])
+  } else {
+    configStore.setMenuList(configStore.rowRoutes)
+  }
+  next()
+})
+
+export default beforeEachRouter
