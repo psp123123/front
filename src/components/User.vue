@@ -51,7 +51,7 @@ onMounted(async () => {
       // 否则从后端获取数据
       const userinfo = await getUserInfo()
       console.log('get from server userinfo:', userinfo)
-      username = userinfo.data?.username
+      username = userinfo.user
     }
 
 

@@ -20,7 +20,7 @@ interface LoginResponse {
 
 // 定义服务端返回userinfo接口数据类型
 interface UserInfoResponse {
-  username: string
+  user: string
 }
 
 // 创建axios实例
