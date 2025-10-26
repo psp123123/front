@@ -8,8 +8,7 @@
       <HeadBar class="head-bar" />
       <div class="layout-content">
         <el-menu class="menu-bar">
-          <!-- <MenuBar :menuList="useConfig.menuList" :key="route.path" /> -->
-          <MenuBar :key="route.path" />
+          <MenuBar :menuList="useConfig.menuList" :key="route.path" />
         </el-menu>
 
         <div class="content-area">
@@ -36,6 +35,7 @@ const routerReady = ref(false)
 // 判断是否隐藏布局（登录页或特殊页面）
 const shouldHideLayout = computed(() => route.meta.hideLayout === true || route.path === '/login')
 
+// 判断路由
 
 
 onMounted(async () => {

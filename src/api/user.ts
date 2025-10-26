@@ -49,12 +49,12 @@ export async function identifyUser(params: LoginParams): Promise<LoginResponse> 
 }
 
 // 发送GET请求，请求/userinfo信息
-export async function getUserInfo(): Promise<UserInfoResponse> {
+export async function getUserInfo() {
   // 使用request拦截器携带token信息请求/userinfo接口
   try {
-    const response = await request.get('/api/userinfo')
-    console.log('get server data :', response.data)
-    return response.data
+    const res = await request.get('/api/userinfo')
+    console.log('get server data :', res)
+    return res
   } catch (error) {
     console.error(error)
     throw error
