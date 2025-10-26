@@ -70,7 +70,7 @@ onMounted(async () => {
 //   router.push('/manager')
 // }
 
-// 监视路由变化
+// 监视路由 变化
 
 const logout = () => {
   localStorage.removeItem('accessToken')
