@@ -32,12 +32,13 @@ const Router = createRouter({
 const beforeEachRouter = Router.beforeEach((to, from, next) => {
   const configStore = useConfigStore()
 
+  console.log('跳转前的路由信息：', from.path)
   //如果进入/manager路由时
   if (to.path.startsWith('/manager')) {
     const managerMenu = configStore.generateManagerMenu()
     configStore.setMenuList([managerMenu])
   } else {
-    configStore.setMenuList(configStore.rowRoutes)
+    const x = configStore.setMenuList(configStore.rowRoutes)
   }
   next()
 })
