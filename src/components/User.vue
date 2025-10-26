@@ -70,6 +70,9 @@ onMounted(async () => {
 //   router.push('/manager')
 // }
 
+const goAccount = () => {
+  router.push('/manager')
+}
 // 监视路由 变化
 
 const logout = () => {
