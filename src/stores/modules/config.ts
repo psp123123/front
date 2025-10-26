@@ -82,7 +82,7 @@ let useConfigStore = defineStore('config', {
       this.menuList = filterMenuManager(menu)
     },
 
-    // 从静态路由中提取manager菜单
+    // 从静态路由中提取manager 菜单
     generateManagerMenu() {
       const managerRoute = constantroutes.find((r) => r.path === '/manager')
       if (!managerRoute || !managerRoute.children) return []
