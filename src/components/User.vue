@@ -71,6 +71,7 @@ onMounted(async () => {
 // }
 
 const goAccount = () => {
+  console.log('进入/manager路由')
   router.push('/manager')
 }
 // 监视路由 变化

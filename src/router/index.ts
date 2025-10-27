@@ -37,6 +37,7 @@ export const beforeEachRouter = Router.beforeEach((to, from, next) => {
   //如果进入/manager路由时
   if (to.path.startsWith('/manager')) {
     const managerMenu = configStore.generateManagerMenu()
+    console.log('进入/manager路由时，数据为', managerMenu)
     configStore.setMenuList([managerMenu])
   } else {
     const x = configStore.setMenuList(configStore.rowRoutes)

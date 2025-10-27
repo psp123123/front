@@ -31,6 +31,12 @@ const routeList = defineProps(['menuList'])
 
 </script>
 
+<script lang="ts">
+// 递归自己的pinia数据
+export default {
+  name: 'Menu',
+}
+</script>
 
 <style scoped>
 .menu-bar {

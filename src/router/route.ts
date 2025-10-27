@@ -18,19 +18,19 @@ export const constantroutes = [
     redirect: '/home',
     component: () => import('@/components/Home.vue'), // 建议使用布局组件
     name: '信息收集',
-    meta: { title: '信息收集', hidden: false },
+    meta: { title: '信息收集', hidden: false, manager: true },
     children: [
       {
         name: 'nmap',
         path: 'nmap',
         component: () => import('@/views/Login.vue'),
-        meta: { title: 'nmap', hidden: false },
+        meta: { title: 'nmap', hidden: false, manager: false },
       },
       {
         name: '工具',
         path: 'tools',
         component: () => import('@/views/Login.vue'),
-        meta: { title: '工具', hidden: false },
+        meta: { title: '工具', hidden: false, manager: false },
       },
     ],
   },
@@ -39,7 +39,7 @@ export const constantroutes = [
     path: '/manager',
     component: () => import('@/components/UserManageBar.vue'), // 添加布局组件
     name: 'user',
-    meta: { title: 'manager', hidden: true, manager: true },
+    meta: { title: 'manager', hidden: true, manager: false },
     children: [
       {
         path: '',
@@ -57,7 +57,7 @@ export const constantroutes = [
           requiresAuth: true, // 修正拼写
           title: 'Edit User',
           hidden: false,
-          manager: true,
+          manager: false,
         },
       },
       {
@@ -68,7 +68,7 @@ export const constantroutes = [
           requiresAuth: true, // 建议也添加权限验证
           title: 'Edit Password',
           hidden: false,
-          manager: true,
+          manager: false,
         },
       },
     ],
@@ -77,6 +77,6 @@ export const constantroutes = [
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('@/views/NotFound.vue'),
-    meta: { title: 'Not Found' },
+    meta: { title: 'Not Found', hidden: true },
   },
 ]
