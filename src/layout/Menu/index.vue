@@ -51,9 +51,6 @@ const routerReady = ref(false)
 // 判断是否隐藏布局（登录页或特殊页面）
 const shouldHideLayout = computed(() => route.meta.hideLayout === true || route.path === '/login')
 
-// 判断路由
-console.log('app.vue中，获取到的路由信息：', useConfig.menuList)
-
 // 判断当前路径是否为/manager模式
 const isManagerPage = computed(() => route.path.startsWith('/manager'))
 
