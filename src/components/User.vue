@@ -26,37 +26,21 @@ import { onMounted, ref } from 'vue'
 // 引入request拦截器
 import { getUserInfo } from '@/api/user'
 
-
-
-
-
 const router = useRouter()
 // 使用存储在pinia中的数据
 const config = useConfigStore()
 const username = ref('')
 
-
-
-
-
 // 组件初始化即获取用户信息
 onMounted(async () => {
   try {
-    // 如果可以获取到pinia中的信息，则使用pinia
-    if (config.userInfo?.username) {
-      username.value = config.userInfo?.username
-      console.log('从pinia中获取用户信息:', username.value)
+    //从后端获取数据
+    const userinfo = await getUserInfo()
+    username.value = userinfo.data.user
 
-    } else {
-      // 否则从后端获取数据
-      const userinfo = await getUserInfo()
-      console.log('get from server userinfo:', userinfo)
-      username.value = userinfo.user
-    }
 
 
   } catch (error) {
-    console.error('get username error:', error)
     router.push('/login')
   }
 })
@@ -71,7 +55,6 @@ onMounted(async () => {
 // }
 
 const goAccount = () => {
-  console.log('进入/manager路由')
   router.push('/manager')
 }
 // 监视路由 变化
