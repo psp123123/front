@@ -45,13 +45,13 @@ onMounted(async () => {
     // 如果可以获取到pinia中的信息，则使用pinia
     if (config.userInfo?.username) {
       username.value = config.userInfo?.username
-      console.warn('user get error:', username)
+      console.log('从pinia中获取用户信息:', username.value)
 
     } else {
       // 否则从后端获取数据
       const userinfo = await getUserInfo()
       console.log('get from server userinfo:', userinfo)
-      username.value = userinfo?.user
+      username.value = userinfo.user
     }
 
 
@@ -61,14 +61,21 @@ onMounted(async () => {
   }
 })
 
+// const goAccount = () => {
+//   const managerMenu = config.generateManagerMenu()
+//   console.log('跳转时获取路由信息,并设置set MenuList', managerMenu)
+//   config.setMenuList([managerMenu])
+//   console.log('default routes are:', config.menuList)
+//   // 跳转
+//   router.push('/manager')
+// }
+
 const goAccount = () => {
-  const managerMenu = config.generateManagerMenu()
-  console.log('跳转时获取路由信息,并设置set MenuList', managerMenu)
-  config.setMenuList([managerMenu])
-  console.log('default routes are:', config.menuList)
-  // 跳转
+  console.log('进入/manager路由')
   router.push('/manager')
 }
+// 监视路由 变化
+
 const logout = () => {
   localStorage.removeItem('accessToken')
   router.push('/login')

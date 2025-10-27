@@ -32,18 +32,10 @@ const routeList = defineProps(['menuList'])
 </script>
 
 <script lang="ts">
+// 递归自己的pinia数据
 export default {
   name: 'Menu',
 }
-
-// export function filterMenu(routes: any) {
-//   return routes
-//     .filter((route: any) => !route.meta?.hidden) // 过滤隐藏项
-//     .map((route: any) => ({
-//       ...route,
-//       children: route.children ? filterMenu(route.children) : []
-//     }));
-// }
 </script>
 
 <style scoped>

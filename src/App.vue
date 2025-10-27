@@ -8,7 +8,7 @@
       <HeadBar class="head-bar" />
       <div class="layout-content">
         <el-menu class="menu-bar">
-          <MenuBar :menuList="useConfig.menuList" :key="route.path" />
+          <MenuBar :menuList="menuListNew" :key="route.path" />
         </el-menu>
 
         <div class="content-area">
@@ -21,11 +21,27 @@
 
 <script lang="ts" setup>
 import { computed, ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { RouterView, useRoute, useRouter } from 'vue-router'
 import HeadBar from './components/HeadBar.vue'
 import MenuBar from './components/MenuBar.vue'
 import useConfigStore from './stores/modules/config'
+import { constantroutes } from './router/route'
+import { filter } from 'xe-utils'
+interface RouteMeta {
+  title?: string
+  hidden?: boolean
+  manager?: boolean
+  [key: string]: any
+}
 
+interface AppRoute {
+  path: string
+  name?: string
+  component?: any
+  redirect?: any
+  meta?: RouteMeta
+  children?: AppRoute[]
+}
 const useConfig = useConfigStore()
 const route = useRoute()
 const router = useRouter()
@@ -34,6 +50,39 @@ const routerReady = ref(false)
 
 // 判断是否隐藏布局（登录页或特殊页面）
 const shouldHideLayout = computed(() => route.meta.hideLayout === true || route.path === '/login')
+
+// 判断路由
+console.log('app.vue中，获取到的路由信息：', useConfig.menuList)
+
+// 判断当前路径是否为/manager模式
+const isManagerPage = computed(() => route.path.startsWith('/manager'))
+
+// 动态过滤菜单
+const menuListNew = computed(() => {
+  if (isManagerPage.value) {
+    // 找到 /manager 路由
+    const managerRoute = constantroutes.find(r => r.path === '/manager')
+    if (managerRoute && managerRoute.children) {
+      // 只显示 /manager 的子菜单（并按需过滤 hidden 或 manager 标记）
+      return managerRoute.children.filter(child => child.meta?.manager)
+    }
+    return []
+  } else {
+    // 默认菜单：排除 manager:true 的项
+    return constantroutes.filter(item => !item.meta?.manager && !item.meta?.hidden)
+  }
+})
+
+
+function filterChildrenByManager(routeItem: AppRoute): AppRoute {
+  const newItem = { ...routeItem }
+  if (newItem.children) {
+    newItem.children = newItem.children
+      .filter((child: AppRoute) => child.meta?.manager)
+      .map(filterChildrenByManager)
+  }
+  return newItem
+}
 
 
 

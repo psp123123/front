@@ -34,7 +34,6 @@ export function filterMenu(routes: RouteItem[] = []): RouteItem[] {
         temp.children = filterMenu(route.children)
       }
 
-      console.log('此时的路由信息：', temp)
       return temp
     })
 }
@@ -55,8 +54,6 @@ export function filterMenuManager(routes: RouteItem[] = []): RouteItem[] {
         if (route.children) {
           temp.children = filterMenuManager(route.children)
         }
-
-        console.log('此时的路由信息：', temp)
         return temp
       })
   )
@@ -80,14 +77,6 @@ let useConfigStore = defineStore('config', {
     // 设置菜单，在触发器使用
     setMenuList(menu: any[]) {
       this.menuList = filterMenuManager(menu)
-    },
-
-    // 从静态路由中提取manager 菜单
-    generateManagerMenu() {
-      const managerRoute = constantroutes.find((r) => r.path === '/manager')
-      if (!managerRoute || !managerRoute.children) return []
-      console.log('获取到的路由信息', managerRoute)
-      return managerRoute
     },
   },
   getters: {},

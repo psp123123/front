@@ -18,19 +18,19 @@ export const constantroutes = [
     redirect: '/home',
     component: () => import('@/components/Home.vue'), // 建议使用布局组件
     name: '信息收集',
-    meta: { title: '信息收集', hidden: false },
+    meta: { title: '信息收集', hidden: false, manager: false },
     children: [
       {
         name: 'nmap',
         path: 'nmap',
         component: () => import('@/views/Login.vue'),
-        meta: { title: 'nmap', hidden: false },
+        meta: { title: 'nmap', hidden: false, manager: false },
       },
       {
         name: '工具',
         path: 'tools',
         component: () => import('@/views/Login.vue'),
-        meta: { title: '工具', hidden: false },
+        meta: { title: '工具', hidden: false, manager: false },
       },
     ],
   },
@@ -46,7 +46,7 @@ export const constantroutes = [
         redirect: { name: 'edituser', hidden: false }, // 默认重定向
         meta: {
           title: 'default',
-          manager: true,
+          manager: false,
         },
       },
       {
@@ -77,6 +77,6 @@ export const constantroutes = [
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('@/views/NotFound.vue'),
-    meta: { title: 'Not Found' },
+    meta: { title: 'Not Found', hidden: true },
   },
 ]

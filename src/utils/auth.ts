@@ -33,10 +33,12 @@ request.interceptors.request.use(
 // -------------响应拦截器
 request.interceptors.response.use(
   (response) => {
-    console.log('get code from server ', response.status)
+    // 1. 只返回data部分
+    const res = response.data
+    console.log('------------获取响应信息', res, response.status)
     // 2. 根据后端状态码处理
     if (response.status !== 200) {
-      console.error('接口错误', response.data.msg || '请求失败')
+      console.error('接口错误', response.statusText || '请求失败')
 
       // 3. 登陆信息失效
       if (response.status === 400) {
