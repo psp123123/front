@@ -1,22 +1,23 @@
 <template>
-  <template v-for="item in routeList.menuList" :index="item.path">
-    <el-menu-item v-if="!item.children" :index="item.path">
+  <template v-for="item in menuList" :index="item.path">
+    <el-menu-item v-if="!item.children" :index="resolvePath(item.path, parentPath)">
       <template #title>
-        <span>{{ item.meta.title }}</span>
+        <span>{{ item.meta?.title }}</span>
       </template>
 
     </el-menu-item>
-    <el-menu-item v-if="item.children && item.children.length == 1" :index="item.children[0].path">
+    <el-menu-item v-if="item.children && item.children.length == 1"
+      :index="resolvePath(item.children[0].path, item.path)">
       <template #title>
-        <span>{{ item.children[0].meta.title }}</span>
+        <span>{{ item.children[0].meta?.title }}</span>
       </template>
 
     </el-menu-item>
-    <el-sub-menu :index="item.path" v-if="item.children && item.children.length > 1">
+    <el-sub-menu :index="resolvePath(item.path)" v-if="item.children && item.children.length > 1">
       <template #title>
-        {{ item.meta.title }}
+        {{ item.meta?.title }}
       </template>
-      <Menu :menuList="item.children"></Menu>
+      <Menu :menuList="item.children" :parentPath="resolvePath(item.path)"></Menu>
     </el-sub-menu>
 
   </template>
@@ -25,9 +26,32 @@
 <script lang="ts" setup>
 
 import { defineProps } from 'vue';
+/** 路由类型（按需扩展） */
+interface RouteMeta {
+  title?: string
+  hidden?: boolean
+  manager?: boolean
+  [k: string]: any
+}
+interface AppRoute {
+  path: string
+  name?: string
+  meta?: RouteMeta
+  children?: AppRoute[]
+}
+const { menuList, parentPath } = defineProps<{ menuList: AppRoute[]; parentPath?: string }>()
 
-const routeList = defineProps(['menuList'])
-
+// 将 path 统一转成绝对路径
+const resolvePath = (path: string, parentPath?: string) => {
+  if (!path) return '/'
+  // 如果已经是绝对路径，直接返回
+  if (path.startsWith('/')) return path
+  // 如果父路径有定义，拼接
+  if (parentPath) return `${parentPath.replace(/\/$/, '')}/${path}`
+  // 默认在根目录
+  console.log('parentPath:', parentPath)
+  return `/${path}`
+}
 
 </script>
 
@@ -37,6 +61,7 @@ export default {
   name: 'Menu',
 }
 </script>
+
 
 <style scoped>
 .menu-bar {
