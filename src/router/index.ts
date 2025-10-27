@@ -12,35 +12,3 @@ const Router = createRouter({
   routes: constantroutes,
 })
 export default Router
-
-// // 全局前置守卫
-// Router.beforeEach((to, from, next) => {
-//   // 设置页面标题
-//   if (to.meta.title) {
-//     document.title = `${to.meta.title}`
-//   }
-//   console.log('全局守卫')
-
-//   // // 权限验证
-//   // if (to.meta.requiresAuth && !isLogin()) {
-//   //   next({ name: 'login', query: { redirect: to.fullPath } })
-//   // } else if (to.name === 'login' && isLogin()) {
-//   //   next({ name: 'home' })
-//   // } else {
-//   //   next()
-//   // }
-// })
-export const beforeEachRouter = Router.beforeEach((to, from, next) => {
-  const configStore = useConfigStore()
-
-  console.log('跳转前的路由信息：', from.path)
-  //如果进入/manager路由时
-  if (to.path.startsWith('/manager')) {
-    const managerMenu = configStore.generateManagerMenu()
-    console.log('进入/manager路由时，数据为', managerMenu)
-    configStore.setMenuList([managerMenu])
-  } else {
-    const x = configStore.setMenuList(configStore.rowRoutes)
-  }
-  next()
-})

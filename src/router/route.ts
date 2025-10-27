@@ -18,7 +18,7 @@ export const constantroutes = [
     redirect: '/home',
     component: () => import('@/components/Home.vue'), // 建议使用布局组件
     name: '信息收集',
-    meta: { title: '信息收集', hidden: false, manager: true },
+    meta: { title: '信息收集', hidden: false, manager: false },
     children: [
       {
         name: 'nmap',
@@ -39,14 +39,14 @@ export const constantroutes = [
     path: '/manager',
     component: () => import('@/components/UserManageBar.vue'), // 添加布局组件
     name: 'user',
-    meta: { title: 'manager', hidden: true, manager: false },
+    meta: { title: 'manager', hidden: true, manager: true },
     children: [
       {
         path: '',
         redirect: { name: 'edituser', hidden: false }, // 默认重定向
         meta: {
           title: 'default',
-          manager: true,
+          manager: false,
         },
       },
       {
@@ -57,7 +57,7 @@ export const constantroutes = [
           requiresAuth: true, // 修正拼写
           title: 'Edit User',
           hidden: false,
-          manager: false,
+          manager: true,
         },
       },
       {
@@ -68,7 +68,7 @@ export const constantroutes = [
           requiresAuth: true, // 建议也添加权限验证
           title: 'Edit Password',
           hidden: false,
-          manager: false,
+          manager: true,
         },
       },
     ],

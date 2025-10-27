@@ -78,24 +78,6 @@ let useConfigStore = defineStore('config', {
     setMenuList(menu: any[]) {
       this.menuList = filterMenuManager(menu)
     },
-
-    // 从静态路由中提取manager菜单
-    generateManagerMenu() {
-      const managerRoute = constantroutes.find((r) => r.path === '/manager')
-      if (!managerRoute || !managerRoute.children) return []
-      // 创建修改后的路由副本
-      const modifiedRoute = {
-        ...managerRoute,
-        meta: {
-          ...managerRoute.meta,
-          manager: true, // 设置manager为true
-          modifiedAt: new Date().toISOString(), // 可选：添加修改标记
-        },
-      }
-      console.log('获取到的路由信息', modifiedRoute)
-      console.log('此时的pinia的数据', this.menuList)
-      return modifiedRoute
-    },
   },
   getters: {},
 })
