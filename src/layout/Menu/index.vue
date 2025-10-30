@@ -37,7 +37,7 @@ import HeadBar from '@/components/HeadBar.vue'
 import MenuBar from '@/components/MenuBar.vue'
 import useConfigStore from '@/stores/modules/config'
 import { constantroutes } from '@/router/route'
-import Websocket from '@/components/websocket.vue'
+import Websocket from '@/components/Websocket.vue'
 
 interface RouteMeta {
     title?: string
