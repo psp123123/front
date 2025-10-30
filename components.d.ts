@@ -34,5 +34,6 @@ declare module 'vue' {
     UserFormDialog: typeof import('./src/components/UserFormDialog.vue')['default']
     UserManageBar: typeof import('./src/components/UserManageBar.vue')['default']
     UserTable: typeof import('./src/components/UserTable.vue')['default']
+    Websocket: typeof import('./src/components/Websocket.vue')['default']
   }
 }

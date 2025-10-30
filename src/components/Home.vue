@@ -1,62 +1,63 @@
 <template>
   <div>
-    <vxe-button @click="insertEvent">新增</vxe-button>
-    <vxe-table
-      border
-      show-overflow
-      ref="tableRef"
-      :edit-config="editConfig"
-      :data="tableData"
-      @edit-activated="editActivatedEvent"
-    >
-      <vxe-column type="seq" width="70"></vxe-column>
-      <vxe-column field="name" title="Name" :edit-render="{ name: 'input' }"></vxe-column>
-      <vxe-column field="sex" title="Sex" :edit-render="{ name: 'input' }"></vxe-column>
-      <vxe-column field="age" title="Age" :edit-render="{ name: 'input' }"></vxe-column>
-    </vxe-table>
+    <el-table ref="tableRef" :data="tableData" style="width: 100%" border lazy row-key="id" :load="load" stripe
+      highlight-current-row :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" @row-click="onRowClick"
+      :row-class-name="getRowClassName">
+      <el-table-column prop="id" label="ID" width="80" />
+      <el-table-column prop="name" label="Name" />
+      <el-table-column prop="date" label="Date" />
+      <el-table-column prop="address" label="Address" />
+    </el-table>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import type { VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
+import type { ElTable } from 'element-plus'
 
-interface RowVO {
+interface User {
   id: number
+  date: string
   name: string
-  role: string
-  sex: string
-  age: number
   address: string
+  hasChildren?: boolean
+  children?: User[]
 }
 
-const tableRef = ref<VxeTableInstance<RowVO>>()
+const tableRef = ref<InstanceType<typeof ElTable>>()
+const expandedRow = ref<number | null>(null)
 
-const tableData = ref<RowVO[]>([
-  { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
-  { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-  { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-  { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' },
-])
+const tableData: User[] = [
+  { id: 1, name: 'Server A', date: '2025-10-01', address: 'New York', hasChildren: true },
+  { id: 2, name: 'Server B', date: '2025-10-02', address: 'London' },
+  { id: 3, name: 'Server C', date: '2025-10-03', address: 'Tokyo', hasChildren: true },
+]
 
-const editConfig = ref<VxeTablePropTypes.EditConfig>({
-  trigger: 'click',
-  mode: 'cell',
-})
+// 模拟懒加载
+const load = (row: User, treeNode: unknown, resolve: (data: User[]) => void) => {
+  setTimeout(() => {
+    resolve([
+      { id: row.id * 10 + 1, name: `${row.name}-Child`, date: '2025-10-27', address: 'Los Angeles' },
+    ])
+  }, 50)
+}
 
-const insertEvent = async () => {
-  const $table = tableRef.value
-  if ($table) {
-    const record = {
-      sex: '1',
-      date12: '2021-01-01',
-    }
-    const { row: newRow } = await $table.insert(record)
-    await $table.setEditCell(newRow, 'name')
+// 点击整行展开/收起
+const onRowClick = (row: User) => {
+  if (row.hasChildren) {
+    tableRef.value?.toggleRowExpansion(row) // 直接控制展开状态
+    expandedRow.value = expandedRow.value === row.id ? null : row.id
   }
 }
 
-const editActivatedEvent = (params: any) => {
-  console.log(params)
+const getRowClassName = ({ row }: { row: User }) => {
+  return row.id === expandedRow.value ? 'expanded-row' : ''
 }
 </script>
+
+<style scoped>
+.expanded-row {
+  background-color: #cb2b2b !important;
+  transition: background-color 0.3s;
+}
+</style>
