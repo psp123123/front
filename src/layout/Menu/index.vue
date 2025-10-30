@@ -12,7 +12,18 @@
                 </el-menu>
 
                 <div class="content-area">
-                    <router-view />
+                    <el-row class="content-row">
+                        <el-col :span="15">
+                            <div class="main-content">
+                                <router-view />
+                            </div>
+                        </el-col>
+
+                        <el-col :span="9">
+                            <Websocket />
+                        </el-col>
+                    </el-row>
+
                 </div>
             </div>
         </div>
@@ -26,6 +37,7 @@ import HeadBar from '@/components/HeadBar.vue'
 import MenuBar from '@/components/MenuBar.vue'
 import useConfigStore from '@/stores/modules/config'
 import { constantroutes } from '@/router/route'
+import Websocket from '@/components/websocket.vue'
 
 interface RouteMeta {
     title?: string
@@ -45,15 +57,11 @@ interface AppRoute {
 const useConfig = useConfigStore()
 const route = useRoute()
 const router = useRouter()
-
 const routerReady = ref(false)
-
 // 判断是否隐藏布局（登录页或特殊页面）
 const shouldHideLayout = computed(() => route.meta.hideLayout === true || route.path === '/login')
-
 // 判断当前路径是否为/manager模式
 const isManagerPage = computed(() => route.path.startsWith('/manager'))
-
 // 动态过滤菜单
 const menuListNew = computed(() => {
     if (isManagerPage.value) {
@@ -78,9 +86,6 @@ const menuListNew = computed(() => {
     }
 })
 
-
-
-
 function filterChildrenByManager(routeItem: AppRoute): AppRoute {
     const newItem = { ...routeItem }
     if (newItem.children) {
@@ -90,8 +95,6 @@ function filterChildrenByManager(routeItem: AppRoute): AppRoute {
     }
     return newItem
 }
-
-
 
 onMounted(async () => {
     await router.isReady()
@@ -106,15 +109,19 @@ onMounted(async () => {
     --content-bg: #f5f5f5;
 }
 
+
 .app-container {
-    height: 100vh;
+    display: flex;
+    height: 97vh;
     overflow: hidden;
+    flex-direction: column;
 }
 
 .main-layout {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    flex: 1;
+    min-height: 0;
 }
 
 .head-bar {
@@ -135,12 +142,23 @@ onMounted(async () => {
     background-color: var(--menu-bg);
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
     padding-top: 32px;
+    height: 100%;
+}
+
+.main-content {
+    flex: 1;
+    overflow: hidden;
+    min-height: 0;
+    margin-right: 10px;
 }
 
 .content-area {
     flex: 1;
-    overflow-y: auto;
-    padding: 24px;
+    overflow: hidden;
+    padding: 20px;
     background-color: var(--content-bg);
+    height: 100%;
+    min-height: 0;
+    box-sizing: border-box;
 }
 </style>
