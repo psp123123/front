@@ -32,7 +32,6 @@ const api = axios.create({
   },
 })
 
-console.log('拼接的请求url:', import.meta.env.VITE_API_URL)
 // 发送POST请求,请求登陆
 export async function identifyUser(params: LoginParams): Promise<LoginResponse> {
   try {
@@ -53,7 +52,6 @@ export async function getUserInfo() {
   // 使用request拦截器携带token信息请求/userinfo接口
   try {
     const res = await request.get('/api/userinfo')
-    console.log('get server data :', res)
     return res
   } catch (error) {
     console.error('getUserInfo run error', error)

@@ -4,9 +4,6 @@ import { constantroutes } from '@/router/route'
 // 引入路由组件
 import { useRoute } from 'vue-router'
 
-// 使用路由组件
-const route = useRoute()
-
 export interface RouteItem {
   path: string
   name?: string

@@ -6,7 +6,7 @@ export const constantroutes = [
     path: '/',
     redirect: '/home',
     component: MainLayout, // 可选，如果你希望布局保持一致
-    meta: { title: '概览', hidden: false, manager: false },
+    meta: { title: '概览', hidden: false, manager: false, isWebsocket: false },
     children: [
       {
         path: 'home',
@@ -22,7 +22,7 @@ export const constantroutes = [
     path: '/login',
     name: 'login',
     component: () => import('@/views/Login.vue'),
-    meta: { title: 'Login', hidden: true, hideLayout: true, manager: false },
+    meta: { title: 'Login', hidden: true, hideLayout: true, manager: false, isWebsocket: false },
   },
 
   // 信息收集菜单
@@ -37,13 +37,13 @@ export const constantroutes = [
         path: 'nmap',
         name: 'nmap',
         component: () => import('@/views/nmap.vue'),
-        meta: { title: 'nmap', hidden: false, manager: false },
+        meta: { title: 'nmap', hidden: false, manager: false, isWebsocket: true },
       },
       {
         path: 'tools',
         name: 'tools',
         component: () => import('@/views/tools.vue'),
-        meta: { title: '工具', hidden: false, manager: false },
+        meta: { title: '工具', hidden: false, manager: false, isWebsocket: true },
       },
     ],
   },
@@ -54,19 +54,19 @@ export const constantroutes = [
     redirect: '/manager/edituser',
     component: MainLayout,
     name: 'user',
-    meta: { title: 'manager', hidden: true, manager: true },
+    meta: { title: 'manager', hidden: true, manager: true, isWebsocket: false },
     children: [
       {
         path: 'edituser',
         name: 'edituser',
         component: () => import('@/components/EditProfile.vue'),
-        meta: { title: 'Edit User', hidden: false, manager: true },
+        meta: { title: 'Edit User', hidden: false, manager: true, isWebsocket: false },
       },
       {
         path: 'editpass',
         name: 'editpass',
         component: () => import('@/components/EditPasswd.vue'),
-        meta: { title: 'Edit Password', hidden: false, manager: true },
+        meta: { title: 'Edit Password', hidden: false, manager: true, isWebsocket: false },
       },
     ],
   },
@@ -76,6 +76,6 @@ export const constantroutes = [
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('@/views/NotFound.vue'),
-    meta: { title: 'Not Found', hidden: true, manager: false },
+    meta: { title: 'Not Found', hidden: true, manager: false, isWebsocket: false },
   },
 ]
