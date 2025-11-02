@@ -36,7 +36,7 @@ export const constantroutes = [
       {
         path: 'nmap',
         name: 'nmap',
-        component: () => import('@/views/nmap.vue'),
+        component: () => import('@/views/nmap/nmap.vue'),
         meta: { title: 'nmap', hidden: false, manager: false, isWebsocket: true },
       },
       {

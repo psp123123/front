@@ -24,7 +24,7 @@ interface UserInfoResponse {
 }
 
 // 创建axios实例
-const api = axios.create({
+export const serverApi = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   timeout: 5000,
   headers: {
@@ -35,7 +35,7 @@ const api = axios.create({
 // 发送POST请求,请求登陆
 export async function identifyUser(params: LoginParams): Promise<LoginResponse> {
   try {
-    const response = await api.post<LoginResponse>('/login', {
+    const response = await serverApi.post<LoginResponse>('/login', {
       user: params.username,
       passwd: params.password,
     })

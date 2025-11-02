@@ -5,20 +5,49 @@
                 <el-card class="websocket-card">
                     <template #header>
                         <div class="card-header">
-                            <span>Card name</span>
+                            <span>console out</span>
                         </div>
                     </template>
                     <div class="card-content">
-                        <p v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</p>
+                        <li v-for="(msg, idx) in messages" :key="idx">{{ msg }}</li>
                     </div>
-                    <template #footer>Footer content</template>
+                    <!-- <template #footer>Footer content</template> -->
                 </el-card>
             </el-col>
         </el-row>
     </div>
 </template>
 
+<script setup lang="ts">
+import { computed } from 'vue'
+import { useWebsocketStore } from '@/stores/modules/websocket'
+
+const wsStore = useWebsocketStore()
+const messages = computed(() => wsStore.messages)
+</script>
+
 <style scoped>
+.card-header {
+    padding: 4px 8px;
+    /* 缩小 padding */
+    font-size: 14px;
+    /* 可以适当调小字体 */
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.websocket-panel {
+    padding: 16px;
+    background: #f5f5f5;
+    border-radius: 6px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.websocket-panel ul {
+    padding-left: 20px;
+}
+
 .websocket-container {
     position: relative;
     flex: 1;
@@ -57,6 +86,15 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    padding: 8px;
+}
+
+:deep(.el-card__header) {
+    min-height: 0 !important;
+    /* 消除 Element Plus 的最小高度限制 */
+    height: auto !important;
+    /* 根据内容自适应高度 */
+    padding: 4px 8px !important;
 }
 
 .card-content {

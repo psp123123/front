@@ -10,14 +10,15 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import globalCostomComponents from '@/components/'
 
 const app = createApp(App)
 
 const pinia = createPinia()
+// 注册持久化插件
+pinia.use(piniaPluginPersistedstate)
 app.use(globalCostomComponents)
-
 app.use(pinia)
 app.use(router)
 app.use(ElementPlus, { size: 'small', zIndex: 3000, locale: zhCn })
