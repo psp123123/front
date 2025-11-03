@@ -20,9 +20,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useWebsocketStore } from '@/stores/modules/websocket'
+import { useWebSocketStore } from '@/stores/modules/websocket'
 
-const wsStore = useWebsocketStore()
+const wsStore = useWebSocketStore()
 const messages = computed(() => wsStore.messages)
 </script>
 

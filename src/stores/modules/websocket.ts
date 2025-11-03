@@ -1,49 +1,116 @@
-// store/websocket.ts
+// stores/websocket.ts
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import type { Ref } from 'vue'
 
-export const useWebsocketStore = defineStore('websocket', () => {
-  const socket = ref<WebSocket | null>(null)
-  const messages = ref<string[]>([])
-  const isConnected = ref(false)
-  const isLoading = ref(false) // 扫描状态
+export interface WSOptions {
+  url: string
+  user?: string
+  token?: string
+  heartbeatInterval?: number
+  reconnectInterval?: number
+  headers?: Record<string, string>
+}
 
-  // 初始化 WebSocket
-  function init(url: string) {
-    if (socket.value) return
-    socket.value = new WebSocket(url)
+export interface WSMessage {
+  type?: string
+  [key: string]: any
+}
 
-    socket.value.onopen = () => {
-      isConnected.value = true
-      console.log('WebSocket connected')
+export const useWebSocketStore = defineStore('websocket', () => {
+  const ws: Ref<WebSocket | null> = ref(null)
+  const messages: Ref<WSMessage[]> = ref([])
+  const isConnected: Ref<boolean> = ref(false)
+
+  const reconnectTimer: Ref<number | null> = ref(null)
+  const heartbeatTimer: Ref<number | null> = ref(null)
+  const sendQueue: Ref<WSMessage[]> = ref([]) // 断线消息缓存
+
+  const defaultOptions: Partial<WSOptions> = {
+    heartbeatInterval: 30000,
+    reconnectInterval: 5000,
+  }
+
+  const connect = (options: WSOptions) => {
+    const opts: WSOptions = { ...defaultOptions, ...options }
+
+    if (!opts.url) throw new Error('WebSocket URL is required')
+
+    // 构造带认证信息的 URL (query)
+    let wsUrl = opts.url
+    if (opts.user || opts.token) {
+      const query = new URLSearchParams()
+      if (opts.user) query.append('user', opts.user)
+      if (opts.token) query.append('token', opts.token)
+      wsUrl += `?${query.toString()}`
     }
 
-    socket.value.onmessage = (event) => {
-      messages.value.push(event.data)
+    ws.value = new WebSocket(wsUrl)
 
-      // 假设后端返回“扫描完成”标识
-      if (event.data.includes('扫描完成')) {
-        isLoading.value = false
+    ws.value.onopen = () => {
+      console.log('[WebSocket] connected')
+      isConnected.value = true
+
+      // 发送缓存消息
+      while (sendQueue.value.length > 0) {
+        const msg = sendQueue.value.shift()
+        if (msg) sendMessage(msg)
+      }
+
+      // 启动心跳
+      heartbeatTimer.value = setInterval(() => {
+        if (ws.value && ws.value.readyState === WebSocket.OPEN) {
+          ws.value.send(JSON.stringify({ type: 'ping' }))
+        }
+      }, opts.heartbeatInterval)
+    }
+
+    ws.value.onmessage = (event: MessageEvent) => {
+      try {
+        const data = JSON.parse(event.data)
+        messages.value.push(data)
+      } catch {
+        messages.value.push({ data: event.data })
       }
     }
 
-    socket.value.onclose = () => {
+    ws.value.onerror = (err) => {
+      console.error('[WebSocket] error', err)
+    }
+
+    ws.value.onclose = () => {
+      console.log('[WebSocket] disconnected')
       isConnected.value = false
-      console.log('WebSocket closed')
-    }
 
-    socket.value.onerror = (err) => {
-      console.error('WebSocket error', err)
-      isLoading.value = false
-    }
-  }
+      // 清理心跳
+      if (heartbeatTimer.value) clearInterval(heartbeatTimer.value)
+      heartbeatTimer.value = null
 
-  function sendMessage(msg: string) {
-    if (socket.value && isConnected.value) {
-      socket.value.send(msg)
-      isLoading.value = true
+      // 自动重连
+      reconnectTimer.value = setTimeout(() => {
+        connect(opts)
+      }, opts.reconnectInterval)
     }
   }
 
-  return { socket, messages, isConnected, isLoading, init, sendMessage }
+  const disconnect = () => {
+    if (heartbeatTimer.value) clearInterval(heartbeatTimer.value)
+    if (reconnectTimer.value) clearTimeout(reconnectTimer.value)
+    if (ws.value) ws.value.close()
+    ws.value = null
+    isConnected.value = false
+    sendQueue.value = []
+  }
+
+  const sendMessage = (msg: WSMessage | string) => {
+    if (ws.value && ws.value.readyState === WebSocket.OPEN) {
+      ws.value.send(typeof msg === 'string' ? msg : JSON.stringify(msg))
+    } else {
+      // 缓存消息，等待重连
+      sendQueue.value.push(typeof msg === 'string' ? { data: msg } : msg)
+      console.warn('[WebSocket] socket not open, message queued')
+    }
+  }
+
+  return { ws, messages, isConnected, connect, disconnect, sendMessage }
 })

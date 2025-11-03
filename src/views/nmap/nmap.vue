@@ -52,9 +52,14 @@
 
 <script setup lang="ts">
 import { ElMessage, ElSubMenu } from 'element-plus'
-import { computed, onMounted, ref } from 'vue'
-import { useWebsocketStore } from '@/stores/modules/websocket'
-const wsStore = useWebsocketStore()
+import { onUnmounted, onMounted, ref } from 'vue'
+import { useWebSocketStore } from '@/stores/modules/websocket'
+import type { WSMessage } from '@/stores/modules/websocket'
+// 引入user相关的pinia存储
+import useConfigStore from '@/stores/modules/config'
+
+const userConfig = useConfigStore()
+const wsStore = useWebSocketStore()
 // 引入pinia存储库
 import { useNmapStore } from './nmap'
 
@@ -62,13 +67,27 @@ const nmapPinia = useNmapStore()
 
 const textarea2 = ref('')
 const radio1 = ref('-sS')
-// 封装sleep函数：等待指定毫秒后resolve
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+
+const protocol = import.meta.env.VITE_WS_PROTOCOL
+const host = import.meta.env.VITE_WS_HOST
+const port = import.meta.env.VITE_WS_PORT
+const path = '/api/nmap'
+
+// 构建 WebSocket 地址
+const wsUrl = `${protocol}://${host}:${port}${path}`
 
 // 页面加载时初始化 WebSocket
 onMounted(() => {
-    wsStore.init('ws://localhost:8080/ws') // 替换为后端 WS 地址
+    wsStore.connect({
+        url: wsUrl,
+        user: userConfig.userInfo?.username,
+        token: userConfig.userInfo?.accessToken
+    })
+})
+
+onUnmounted(() => {
+    wsStore.disconnect()
 })
 
 const nmapVerify = () => {
@@ -82,7 +101,9 @@ const nmapVerify = () => {
         scanType: radio1.value
     })
 
-    wsStore.sendMessage(payload)
+    const msg: WSMessage = { type: 'chat', payload }
+    wsStore.sendMessage(msg)
+
 }
 
 </script>

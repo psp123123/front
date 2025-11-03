@@ -1,8 +1,6 @@
 // 引入pinia
 import { defineStore } from 'pinia'
 import { constantroutes } from '@/router/route'
-// 引入路由组件
-import { useRoute } from 'vue-router'
 
 export interface RouteItem {
   path: string
