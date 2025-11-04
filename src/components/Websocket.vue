@@ -9,9 +9,10 @@
                         </div>
                     </template>
                     <div class="card-content">
-                        <li v-for="(msg, idx) in messages" :key="idx">{{ msg }}</li>
+                        <ul class="message-list">
+                            <li v-for="(msg, idx) in messages" :key="idx" class="message-item">{{ msg }}</li>
+                        </ul>
                     </div>
-                    <!-- <template #footer>Footer content</template> -->
                 </el-card>
             </el-col>
         </el-row>
@@ -27,80 +28,103 @@ const messages = computed(() => wsStore.messages)
 </script>
 
 <style scoped>
-.card-header {
-    padding: 4px 8px;
-    /* 缩小 padding */
-    font-size: 14px;
-    /* 可以适当调小字体 */
-    font-weight: 500;
-    line-height: 1.2;
-}
-
-.websocket-panel {
-    padding: 16px;
-    background: #f5f5f5;
-    border-radius: 6px;
-    max-height: 500px;
-    overflow-y: auto;
-}
-
-.websocket-panel ul {
-    padding-left: 20px;
-}
-
 .websocket-container {
     position: relative;
     flex: 1;
     height: 100%;
     box-sizing: border-box;
-    /* 移除 padding-bottom 或根据需要调整 */
-    /* padding-bottom: 80px; */
     background-color: blueviolet;
     display: flex;
-    /* 添加flex布局 */
 }
 
 .websocket-row {
     flex: 1;
-    /* 占据所有可用空间 */
     display: flex;
-    /* 确保row也是flex容器 */
 }
 
 .websocket-col {
     flex: 1;
-    /* col占据所有空间 */
     display: flex;
-    /* 确保col也是flex容器 */
 }
 
 .websocket-card {
     flex: 1;
-    /* 卡片占据所有空间 */
     display: flex;
     flex-direction: column;
 }
 
-/* 确保卡片内部使用flex布局 */
+/* 卡片头部样式 */
+.card-header {
+    padding: 4px 8px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+/* 卡片内容区域 - 关键样式 */
+.card-content {
+    flex: 1;
+    overflow: hidden;
+    /* 隐藏内部元素的溢出 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* 消息列表容器 */
+.message-list {
+    flex: 1;
+    overflow-y: auto;
+    /* 启用垂直滚动 */
+    margin: 0;
+    padding: 8px;
+    list-style: none;
+    max-height: 100%;
+    /* 确保不会超出父容器 */
+}
+
+/* 单个消息项 */
+.message-item {
+    padding: 4px 8px;
+    margin-bottom: 4px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border-left: 3px solid #409eff;
+    word-break: break-all;
+    /* 长文本自动换行 */
+}
+
+/* 自定义滚动条样式 */
+.message-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.message-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.message-list::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.message-list::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Element Plus 样式覆盖 */
 :deep(.el-card__body) {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 8px;
+    padding: 0 !important;
+    /* 移除内边距，在 message-list 中控制 */
 }
 
 :deep(.el-card__header) {
     min-height: 0 !important;
-    /* 消除 Element Plus 的最小高度限制 */
     height: auto !important;
-    /* 根据内容自适应高度 */
     padding: 4px 8px !important;
-}
-
-.card-content {
-    flex: 1;
-    overflow-y: auto;
-    /* 添加滚动以防内容过多 */
-    overflow: hidden;
+    border-bottom: 1px solid #ebeef5;
 }
 </style>
