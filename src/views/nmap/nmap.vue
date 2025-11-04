@@ -78,6 +78,7 @@ const wsUrl = `${protocol}://${host}${path}`
 
 // 页面加载时初始化 WebSocket
 onMounted(() => {
+
     const wsstoreConnect = wsStore.connect({
         url: wsUrl,
         user: userConfig.userInfo?.username,

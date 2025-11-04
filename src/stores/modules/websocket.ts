@@ -16,7 +16,8 @@ export interface WSMessage {
 }
 
 export const useWebSocketStore = defineStore('websocket', () => {
-  const ws: Ref<WebSocket | null> = ref(null)
+  // 定义ws变量，为WebSocket类型
+  const ws = ref<WebSocket | null>(null)
   const messages: Ref<WSMessage[]> = ref([])
   const isConnected: Ref<boolean> = ref(false)
 
@@ -35,6 +36,7 @@ export const useWebSocketStore = defineStore('websocket', () => {
 
     // 使用 URL 对象安全拼接 query 参数
     const url = new URL(opts.url, window.location.origin)
+    console.log('-----测试拼接的url:', url.toString())
     if (opts.user) url.searchParams.set('user', opts.user)
     if (opts.token) url.searchParams.set('token', opts.token)
 
@@ -81,9 +83,9 @@ export const useWebSocketStore = defineStore('websocket', () => {
       heartbeatTimer.value = null
 
       // 自动重连
-      reconnectTimer.value = window.setTimeout(() => {
-        connect(opts)
-      }, opts.reconnectInterval)
+      // reconnectTimer.value = window.setTimeout(() => {
+      //   connect(opts)
+      // }, opts.reconnectInterval)
     }
   }
 
