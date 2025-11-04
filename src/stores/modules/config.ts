@@ -1,6 +1,7 @@
 // 引入pinia
 import { defineStore } from 'pinia'
 import { constantroutes } from '@/router/route'
+import { getUserInfo } from '@/api/user'
 
 export interface RouteItem {
   path: string
@@ -73,7 +74,18 @@ let useConfigStore = defineStore('config', {
     setMenuList(menu: any[]) {
       this.menuList = filterMenuManager(menu)
     },
+
+    async initUser() {
+      if (!localStorage.getItem('accessToken')) return
+      try {
+        const res = await getUserInfo()
+        this.userInfo = res.data
+      } catch (e) {
+        console.error('加载用户信息失败:', e)
+      }
+    },
   },
+
   getters: {},
 })
 

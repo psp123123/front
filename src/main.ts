@@ -12,6 +12,7 @@ import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import globalCostomComponents from '@/components/'
+import useConfigStore from './stores/modules/config'
 
 const app = createApp(App)
 
@@ -26,5 +27,7 @@ app.use(VXEUI) // 注册PC UI组件
 app.use(VXETable) // 注册表格组件
 // svg插件
 import 'virtual:svg-icons-register'
-
+// 应用启动前等待用户初始化完成
+const userStore = useConfigStore()
+await userStore.initUser()
 app.mount('#app')
