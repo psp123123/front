@@ -71,11 +71,10 @@ const radio1 = ref('-sS')
 
 const protocol = import.meta.env.VITE_WS_PROTOCOL
 const host = import.meta.env.VITE_WS_HOST
-const port = import.meta.env.VITE_WS_PORT
+// const port = import.meta.env.VITE_WS_PORT
 const path = '/api/nmap'
-
 // 构建 WebSocket 地址
-const wsUrl = `${protocol}://${host}:${port}${path}`
+const wsUrl = `${protocol}://${host}:${path}`
 
 // 页面加载时初始化 WebSocket
 onMounted(() => {
