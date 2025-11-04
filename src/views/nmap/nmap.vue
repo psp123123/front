@@ -83,7 +83,7 @@ onMounted(() => {
         user: userConfig.userInfo?.username,
         token: userConfig.userInfo?.accessToken
     })
-    console.log("刷新后的wsURL信息:", wsstoreConnect)
+    console.log("刷新后的wsURL信息:", wsUrl, userConfig.userInfo?.username, userConfig.userInfo?.accessToken)
 })
 
 onUnmounted(() => {
