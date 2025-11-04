@@ -78,11 +78,12 @@ const wsUrl = `${protocol}://${host}${path}`
 
 // 页面加载时初始化 WebSocket
 onMounted(() => {
-    wsStore.connect({
+    const wsstoreConnect = wsStore.connect({
         url: wsUrl,
         user: userConfig.userInfo?.username,
         token: userConfig.userInfo?.accessToken
     })
+    console.log("刷新后的wsURL信息:", wsstoreConnect)
 })
 
 onUnmounted(() => {
