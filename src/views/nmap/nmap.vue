@@ -81,6 +81,7 @@ onMounted(async () => {
     // 1️⃣ 确保 userInfo 存在（从持久化或接口恢复）
     if (!userConfig.userInfo) {
         await userConfig.initUser()
+        console.log('初始化initUser函数，到pinia中', userConfig.userInfo)
     }
 
     // 2️⃣ 确保 userInfo 已存在后再建立 WebSocket
