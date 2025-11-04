@@ -85,7 +85,10 @@ let useConfigStore = defineStore('config', {
       }
     },
   },
-
+  persist: {
+    key: 'config-store',
+    storage: localStorage, // 可选：也可以使用 sessionStorage
+  },
   getters: {},
 })
 
