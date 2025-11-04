@@ -88,7 +88,7 @@ onMounted(async () => {
     }
 
     // 2️⃣ 确保 userInfo 已存在后再建立 WebSocket
-    if (userConfig.userInfo?.username && userConfig.userInfo?.accessToken) {
+    if (userConfig.userInfo?.username && localStorage.getItem('accessToken')) {
         wsStore.connect({
             url: wsUrl,
             user: userConfig.userInfo.username,
