@@ -101,5 +101,6 @@ const messages = computed(() => wsStore.messages)
     flex: 1;
     overflow-y: auto;
     /* 添加滚动以防内容过多 */
+    overflow: hidden;
 }
 </style>
