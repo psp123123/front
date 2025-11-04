@@ -77,14 +77,22 @@ const path = '/api/ws'
 const wsUrl = `${protocol}://${host}${path}`
 
 // 页面加载时初始化 WebSocket
-onMounted(() => {
+onMounted(async () => {
+    // 1️⃣ 确保 userInfo 存在（从持久化或接口恢复）
+    if (!userConfig.userInfo) {
+        await userConfig.initUser()
+    }
 
-    const wsstoreConnect = wsStore.connect({
-        url: wsUrl,
-        user: userConfig.userInfo?.username,
-        token: userConfig.userInfo?.accessToken
-    })
-    console.log("刷新后的wsURL信息:", wsUrl, userConfig.userInfo?.username, userConfig.userInfo?.accessToken)
+    // 2️⃣ 确保 userInfo 已存在后再建立 WebSocket
+    if (userConfig.userInfo?.username && userConfig.userInfo?.accessToken) {
+        wsStore.connect({
+            url: wsUrl,
+            user: userConfig.userInfo.username,
+            token: userConfig.userInfo.accessToken,
+        })
+    } else {
+        console.warn('用户信息为空，无法建立 WebSocket 连接')
+    }
 })
 
 onUnmounted(() => {
