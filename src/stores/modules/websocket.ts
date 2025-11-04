@@ -1,4 +1,3 @@
-// stores/websocket.ts
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { Ref } from 'vue'
@@ -9,7 +8,6 @@ export interface WSOptions {
   token?: string
   heartbeatInterval?: number
   reconnectInterval?: number
-  headers?: Record<string, string>
 }
 
 export interface WSMessage {
@@ -24,7 +22,7 @@ export const useWebSocketStore = defineStore('websocket', () => {
 
   const reconnectTimer: Ref<number | null> = ref(null)
   const heartbeatTimer: Ref<number | null> = ref(null)
-  const sendQueue: Ref<WSMessage[]> = ref([]) // 断线消息缓存
+  const sendQueue: Ref<WSMessage[]> = ref([])
 
   const defaultOptions: Partial<WSOptions> = {
     heartbeatInterval: 30000,
@@ -33,19 +31,16 @@ export const useWebSocketStore = defineStore('websocket', () => {
 
   const connect = (options: WSOptions) => {
     const opts: WSOptions = { ...defaultOptions, ...options }
-
     if (!opts.url) throw new Error('WebSocket URL is required')
 
-    // 构造带认证信息的 URL (query)
-    let wsUrl = opts.url
-    if (opts.user || opts.token) {
-      const query = new URLSearchParams()
-      if (opts.user) query.append('user', opts.user)
-      if (opts.token) query.append('token', opts.token)
-      wsUrl += `?${query.toString()}`
-    }
+    // 使用 URL 对象安全拼接 query 参数
+    const url = new URL(opts.url, window.location.origin)
+    if (opts.user) url.searchParams.set('user', opts.user)
+    if (opts.token) url.searchParams.set('token', opts.token)
 
-    ws.value = new WebSocket(wsUrl)
+    console.log('[WebSocket] connecting to', url.toString())
+
+    ws.value = new WebSocket(url.toString())
 
     ws.value.onopen = () => {
       console.log('[WebSocket] connected')
@@ -82,12 +77,11 @@ export const useWebSocketStore = defineStore('websocket', () => {
       console.log('[WebSocket] disconnected')
       isConnected.value = false
 
-      // 清理心跳
       if (heartbeatTimer.value) clearInterval(heartbeatTimer.value)
       heartbeatTimer.value = null
 
       // 自动重连
-      reconnectTimer.value = setTimeout(() => {
+      reconnectTimer.value = window.setTimeout(() => {
         connect(opts)
       }, opts.reconnectInterval)
     }
@@ -106,7 +100,6 @@ export const useWebSocketStore = defineStore('websocket', () => {
     if (ws.value && ws.value.readyState === WebSocket.OPEN) {
       ws.value.send(typeof msg === 'string' ? msg : JSON.stringify(msg))
     } else {
-      // 缓存消息，等待重连
       sendQueue.value.push(typeof msg === 'string' ? { data: msg } : msg)
       console.warn('[WebSocket] socket not open, message queued')
     }
