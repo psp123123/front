@@ -1,6 +1,6 @@
 import SvgIcon from '@/components/svg/index.vue'
-
-const allGlobalComponents = { SvgIcon }
+import Loading from '@/components/loading/index.vue'
+const allGlobalComponents = { SvgIcon, Loading }
 // 对外暴露插件对象
 export default {
   install(app: any) {

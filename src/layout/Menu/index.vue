@@ -13,13 +13,13 @@
 
                 <div class="content-area">
                     <el-row class="content-row">
-                        <el-col :span="15">
+                        <el-col :span="isWebsocket ? 15 : 24">
                             <div class="main-content">
                                 <router-view />
                             </div>
                         </el-col>
 
-                        <el-col :span="9">
+                        <el-col :span="9" v-show="isWebsocket">
                             <Websocket />
                         </el-col>
                     </el-row>
@@ -37,7 +37,7 @@ import HeadBar from '@/components/HeadBar.vue'
 import MenuBar from '@/components/MenuBar.vue'
 import useConfigStore from '@/stores/modules/config'
 import { constantroutes } from '@/router/route'
-import Websocket from '@/components/websocket.vue'
+import Websocket from '@/components/Websocket.vue'
 
 interface RouteMeta {
     title?: string
@@ -86,15 +86,8 @@ const menuListNew = computed(() => {
     }
 })
 
-function filterChildrenByManager(routeItem: AppRoute): AppRoute {
-    const newItem = { ...routeItem }
-    if (newItem.children) {
-        newItem.children = newItem.children
-            .filter((child: AppRoute) => child.meta?.manager)
-            .map(filterChildrenByManager)
-    }
-    return newItem
-}
+// 判断websocket组件是否展示
+const isWebsocket = computed(() => route.meta?.isWebsocket)
 
 onMounted(async () => {
     await router.isReady()

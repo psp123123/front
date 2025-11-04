@@ -24,7 +24,7 @@ interface UserInfoResponse {
 }
 
 // 创建axios实例
-const api = axios.create({
+export const serverApi = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   timeout: 5000,
   headers: {
@@ -32,11 +32,10 @@ const api = axios.create({
   },
 })
 
-console.log('拼接的请求url:', import.meta.env.VITE_API_URL)
 // 发送POST请求,请求登陆
 export async function identifyUser(params: LoginParams): Promise<LoginResponse> {
   try {
-    const response = await api.post<LoginResponse>('/login', {
+    const response = await serverApi.post<LoginResponse>('/login', {
       user: params.username,
       passwd: params.password,
     })
@@ -53,7 +52,6 @@ export async function getUserInfo() {
   // 使用request拦截器携带token信息请求/userinfo接口
   try {
     const res = await request.get('/api/userinfo')
-    console.log('get server data :', res)
     return res
   } catch (error) {
     console.error('getUserInfo run error', error)
