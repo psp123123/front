@@ -83,7 +83,7 @@ onMounted(async () => {
         await userConfig.initUser()
         console.log('初始化initUser函数，到pinia中', userConfig.userInfo)
     } else {
-        console.log('userconfig.userinfo exist', userConfig.userInfo?.username)
+        console.log('userconfig.userinfo exist', userConfig.userInfo)
     }
 
     // 2️⃣ 确保 userInfo 已存在后再建立 WebSocket
