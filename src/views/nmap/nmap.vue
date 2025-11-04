@@ -92,7 +92,7 @@ onMounted(async () => {
         wsStore.connect({
             url: wsUrl,
             user: userConfig.userInfo.username,
-            token: userConfig.userInfo.accessToken,
+            token: localStorage.getItem('accessToken') as string,
         })
     } else {
         console.warn('用户信息为空，无法建立 WebSocket 连接')
