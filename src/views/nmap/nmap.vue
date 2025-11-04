@@ -84,6 +84,7 @@ onMounted(async () => {
         console.log('初始化initUser函数，到pinia中', userConfig.userInfo)
     } else {
         console.log('userconfig.userinfo exist', userConfig.userInfo, 'token is', localStorage.getItem('accessToken'))
+        console.log('pinia中是否存在accessToken', userConfig.userInfo?.accessToken)
     }
 
     // 2️⃣ 确保 userInfo 已存在后再建立 WebSocket
