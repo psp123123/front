@@ -50,39 +50,37 @@ const formatMessage = (msg: any) => {
     }
 }
 
-// 自动滚动到底部（稳健版本）
+// 修改 scrollToBottom 函数，使其更直接可靠
 const scrollToBottom = () => {
-    if (!consoleRef.value || isCollapsed.value) return
-    const container = consoleRef.value
-    requestAnimationFrame(() => {
-        container.scrollTop = container.scrollHeight
-        setTimeout(() => {
-            const atBottom = Math.abs(container.scrollHeight - container.scrollTop - container.clientHeight) < 2
-            if (!atBottom) {
-                container.scrollTop = container.scrollHeight
-            }
-        }, 30)
-    })
-}
+    if (!consoleRef.value || isCollapsed.value) return;
 
-// 判断用户是否接近底部
-const isUserNearBottom = () => {
-    if (!consoleRef.value) return true
-    const { scrollTop, scrollHeight, clientHeight } = consoleRef.value
-    return scrollHeight - scrollTop - clientHeight < 50
-}
+    const container = consoleRef.value;
+    // 直接设置滚动位置，使用 scrollHeight - clientHeight 确保滚动到底部
+    container.scrollTop = container.scrollHeight - container.clientHeight;
+};
 
-// 监听消息变化
+// 修改监听器，增加更多确保DOM更新的机制
 watch(
     messages,
     async (newMessages, oldMessages) => {
-        if (newMessages.length > (oldMessages?.length || 0) && isUserNearBottom()) {
-            await nextTick()
-            scrollToBottom()
+        if (newMessages.length > (oldMessages?.length || 0)) {
+            // 如果用户在底部附近，自动滚动
+            if (isUserNearBottom()) {
+                // 使用双重nextTick确保DOM已完全更新
+                await nextTick();
+                await nextTick();
+                scrollToBottom();
+            }
         }
     },
     { deep: true }
-)
+);
+const isUserNearBottom = () => {
+    if (!consoleRef.value) return true;
+    const { scrollTop, scrollHeight, clientHeight } = consoleRef.value;
+    // 减小阈值，让判断更灵敏
+    return scrollHeight - scrollTop - clientHeight < 10;
+};
 
 </script>
 
