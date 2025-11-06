@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, nextTick } from 'vue'
+import { computed, ref, watch, nextTick, onMounted } from 'vue'
 import { useWebSocketStore } from '@/stores/modules/websocket'
 import useConfigStore from '@/stores/modules/config'
 
@@ -28,60 +28,73 @@ const messages = computed(() => wsStore.messages)
 const useConfig = useConfigStore()
 const consoleRef = ref<HTMLElement | null>(null)
 
-// 使用 computed 确保响应式
 const isCollapsed = computed(() => useConfig.isCollapsed)
 
 // 格式化消息内容
 const formatMessage = (msg: any) => {
     if (msg.type === 'chat' && msg.payload) {
         try {
-            // 尝试解析 payload 中的 JSON
             const payload = JSON.parse(msg.payload)
             return `Host: ${payload.host}, Scan Type: ${payload.scanType}`
         } catch (e) {
-            // 如果解析失败，返回原始 payload
             return msg.payload
         }
     } else if (msg.type === 'ping') {
         return 'Ping received'
     } else {
-        // 对于其他类型的消息，返回类型信息
         return `Message type: ${msg.type}`
     }
 }
 
-// 修改 scrollToBottom 函数，使其更直接可靠
+// 强制滚动到底部的函数
 const scrollToBottom = () => {
     if (!consoleRef.value || isCollapsed.value) return;
 
-    const container = consoleRef.value;
-    // 直接设置滚动位置，使用 scrollHeight - clientHeight 确保滚动到底部
-    container.scrollTop = container.scrollHeight - container.clientHeight;
+    // 使用 requestAnimationFrame 确保在DOM渲染后执行
+    requestAnimationFrame(() => {
+        const container = consoleRef.value;
+        if (!container) return;
+
+        // 平滑滚动到底部
+        container.scrollTo({
+            top: container.scrollHeight,
+            behavior: 'smooth'
+        });
+    });
 };
 
-// 修改监听器，增加更多确保DOM更新的机制
+// 组件挂载时初始化滚动
+onMounted(() => {
+    scrollToBottom();
+});
+
+// 优化后的消息监听器
 watch(
     messages,
-    async (newMessages, oldMessages) => {
-        if (newMessages.length > (oldMessages?.length || 0)) {
-            // 如果用户在底部附近，自动滚动
-            if (isUserNearBottom()) {
-                // 使用双重nextTick确保DOM已完全更新
-                await nextTick();
-                await nextTick();
+    async (newMessages) => {
+        // 确保DOM更新完成
+        await nextTick();
+
+        // 新消息到达时总是尝试滚动
+        if (!isCollapsed.value) {
+            // 延迟滚动确保内容渲染完成
+            setTimeout(() => {
                 scrollToBottom();
-            }
+            }, 50);
         }
     },
-    { deep: true }
+    { deep: true, immediate: true }
 );
-const isUserNearBottom = () => {
-    if (!consoleRef.value) return true;
-    const { scrollTop, scrollHeight, clientHeight } = consoleRef.value;
-    // 减小阈值，让判断更灵敏
-    return scrollHeight - scrollTop - clientHeight < 10;
-};
 
+// 初始加载时滚动到底部
+watch(
+    () => isCollapsed.value,
+    (collapsed) => {
+        if (!collapsed) {
+            nextTick(scrollToBottom);
+        }
+    }
+);
 </script>
 
 <style scoped>
