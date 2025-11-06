@@ -1,9 +1,8 @@
 <template>
-    <div class="console-container">
-        <div class="console-layout" :class="{ collapsed: isCollapsed }">
-            <div class="console-header" @click="toggleCollapse">
+    <div class="console-container" :class="{ collapsed: isCollapsed }">
+        <div class="console-layout">
+            <div class="console-header" @click="useConfig.toggle">
                 <span class="header-title">Console</span>
-                <!-- <button class="clear-btn" @click.stop="clearMessages">Clear</button> -->
                 <span class="collapse-icon">
                     {{ isCollapsed ? '▼' : '▲' }}
                 </span>
@@ -14,9 +13,6 @@
                         <span class="timestamp" v-if="showTimestamp">{{ formatTimestamp(msg.timestamp) }}</span>
                         <span class="message-content">{{ msg.content }}</span>
                     </div>
-                    <!-- <div v-if="messages.length === 0" class="empty-state">
-                        No messages yet
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -26,13 +22,16 @@
 <script setup lang="ts">
 import { computed, ref, watch, nextTick } from 'vue'
 import { useWebSocketStore } from '@/stores/modules/websocket'
+import useConfigStore from '@/stores/modules/config'
 
 const wsStore = useWebSocketStore()
 const messages = computed(() => wsStore.messages)
-
+const useConfig = useConfigStore()
 const consoleRef = ref<HTMLElement | null>(null)
 const showTimestamp = ref(true)
-const isCollapsed = ref(false)
+
+// 使用 computed 确保响应式
+const isCollapsed = computed(() => useConfig.isCollapsed)
 
 // 当 messages 更新时，滚动到底部
 watch(messages, async () => {
@@ -54,16 +53,6 @@ const scrollToBottom = () => {
 const formatTimestamp = (timestamp: number) => {
     return new Date(timestamp).toLocaleTimeString()
 }
-
-// 切换折叠状态
-const toggleCollapse = () => {
-    isCollapsed.value = !isCollapsed.value
-}
-
-// // 清空消息
-// const clearMessages = () => {
-//     wsStore.clearMessages()
-// }
 </script>
 
 <style scoped>
@@ -71,36 +60,37 @@ const toggleCollapse = () => {
     height: 86vh;
     position: relative;
     width: 100%;
+    transition: all 0.3s ease;
+}
+
+/* 折叠状态下的容器样式 */
+.console-container.collapsed {
+    height: auto;
+    position: absolute;
+    top: 0;
+    right: 16px;
+    width: auto;
+    z-index: 1000;
 }
 
 .console-layout {
-    background-color: #1e1e1e;
+    background-color: #c5ebab;
     height: 100%;
-    border: 0px solid #333;
+    border: 0px solid #cfe69a;
     border-radius: 4px;
     display: flex;
     flex-direction: column;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     color: #d4d4d4;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    /* overflow: hidden; */
+    transition: all 0.3s ease;
 }
 
-.console-layout.collapsed {
-    height: 0;
-    width: 200px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: auto;
-    left: auto;
-    transform-origin: top right;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+/* 折叠状态下的布局样式 */
+.console-container.collapsed .console-layout {
+    height: auto;
+    width: 120px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
 }
 
 .console-header {
@@ -113,7 +103,7 @@ const toggleCollapse = () => {
     border-radius: 4px 4px 0 0;
     cursor: pointer;
     user-select: none;
-    transition: background-color 0.2s;
+    /* transition: all 0.2s; */
     flex-shrink: 0;
 }
 
@@ -121,32 +111,17 @@ const toggleCollapse = () => {
     background-color: #38383b;
 }
 
-.console-layout.collapsed .console-header {
+/* 折叠状态下的头部样式 */
+.console-container.collapsed .console-header {
     border-radius: 4px;
-    border-bottom: none;
-    border-top: none;
+    padding: 8px;
+    min-width: 120px;
 }
 
 .header-title {
     font-weight: 600;
     font-size: 14px;
     color: #cccccc;
-}
-
-.clear-btn {
-    background-color: #0e639c;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    padding: 4px 8px;
-    font-size: 12px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    z-index: 1;
-}
-
-.clear-btn:hover {
-    background-color: #1177bb;
 }
 
 .collapse-icon {
@@ -156,7 +131,7 @@ const toggleCollapse = () => {
     transition: transform 0.3s ease;
 }
 
-.console-layout.collapsed .collapse-icon {
+.console-container.collapsed .collapse-icon {
     transform: rotate(180deg);
 }
 
@@ -165,14 +140,11 @@ const toggleCollapse = () => {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
 }
 
 .console-content.collapsed {
-    flex: 0;
-    opacity: 0;
-    height: 0;
-    overflow: hidden;
+    display: none;
 }
 
 .console-context {
@@ -185,7 +157,6 @@ const toggleCollapse = () => {
     line-height: 1.4;
     scrollbar-width: thin;
     scrollbar-color: #c3c5c0 #a5aaa1;
-    transition: opacity 0.2s ease;
 }
 
 /* Webkit 浏览器滚动条样式 */

@@ -13,13 +13,13 @@
 
                 <div class="content-area">
                     <el-row class="content-row">
-                        <el-col :span="isWebsocket ? 15 : 24">
+                        <el-col :span="isWebsocket && !useConfig.isCollapsed ? 15 : 24">
                             <div class="main-content">
                                 <router-view />
                             </div>
                         </el-col>
 
-                        <el-col :span="9" v-show="isWebsocket">
+                        <el-col :span="9" v-if="isWebsocket">
                             <!-- <Websocket /> -->
                             <textCustom />
                         </el-col>

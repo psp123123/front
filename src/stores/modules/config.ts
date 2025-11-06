@@ -61,6 +61,7 @@ let useConfigStore = defineStore('config', {
       menuList: filterMenu(constantroutes),
       userInfo: null as UserInfo | null,
       rowRoutes: constantroutes,
+      isCollapsed: true,
     }
   },
 
@@ -68,6 +69,11 @@ let useConfigStore = defineStore('config', {
   actions: {
     setUser(userinfo: UserInfo) {
       this.userInfo = userinfo
+    },
+
+    // 改变websocket文本框折叠状态
+    toggle() {
+      this.isCollapsed = !this.isCollapsed
     },
 
     // 设置菜单，在触发器使用
