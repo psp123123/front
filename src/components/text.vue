@@ -20,12 +20,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, nextTick } from 'vue'
+import { computed, ref, watch, nextTick, onMounted } from 'vue'
 import { useWebSocketStore } from '@/stores/modules/websocket'
 import useConfigStore from '@/stores/modules/config'
 
 const wsStore = useWebSocketStore()
-const messages = computed(() => wsStore.messages)
+const messages = computed(() => {
+    console.log('Current messages:', wsStore.messages)
+    return wsStore.messages || []
+})
 const useConfig = useConfigStore()
 const consoleRef = ref<HTMLElement | null>(null)
 
@@ -34,11 +37,11 @@ console.log('---------------ws info:', messages)
 const isCollapsed = computed(() => useConfig.isCollapsed)
 
 // 当 messages 更新时，滚动到底部
-watch(messages, async () => {
+watch(messages, async (newMessages) => {
+    console.log('Messages updated:', newMessages)
     await nextTick()
     scrollToBottom()
-    console.log('---------------ws info:', messages)
-})
+}, { deep: true })
 
 // 滚动到底部
 const scrollToBottom = () => {
@@ -49,6 +52,11 @@ const scrollToBottom = () => {
         })
     }
 }
+// 添加 mounted 钩子检查初始状态
+onMounted(() => {
+    console.log('Console component mounted')
+    console.log('Initial messages:', wsStore.messages)
+})
 
 
 </script>
