@@ -1,19 +1,23 @@
 <template>
-    <div class="console-layout" :class="{ collapsed: isCollapsed }">
-        <div class="console-header" @click="toggleCollapse">
-            <span class="header-title">Console</span>
-            <!-- <button class="clear-btn" @click.stop="clearMessages">Clear</button> -->
-            <span class="collapse-icon">
-                {{ isCollapsed ? '▼' : '▲' }}
-            </span>
-        </div>
-        <div class="console-context" ref="consoleRef" v-show="!isCollapsed">
-            <div v-for="(msg, idx) in messages" :key="idx" class="message-line">
-                <span class="timestamp" v-if="showTimestamp">{{ formatTimestamp(msg.timestamp) }}</span>
-                <span class="message-content">{{ msg.content }}</span>
+    <div class="console-container">
+        <div class="console-layout" :class="{ collapsed: isCollapsed }">
+            <div class="console-header" @click="toggleCollapse">
+                <span class="header-title">Console</span>
+                <!-- <button class="clear-btn" @click.stop="clearMessages">Clear</button> -->
+                <span class="collapse-icon">
+                    {{ isCollapsed ? '▼' : '▲' }}
+                </span>
             </div>
-            <div v-if="messages.length === 0" class="empty-state">
-                No messages yet
+            <div class="console-content" :class="{ collapsed: isCollapsed }">
+                <div class="console-context" ref="consoleRef">
+                    <div v-for="(msg, idx) in messages" :key="idx" class="message-line">
+                        <span class="timestamp" v-if="showTimestamp">{{ formatTimestamp(msg.timestamp) }}</span>
+                        <span class="message-content">{{ msg.content }}</span>
+                    </div>
+                    <div v-if="messages.length === 0" class="empty-state">
+                        No messages yet
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -40,7 +44,6 @@ watch(messages, async () => {
 const scrollToBottom = () => {
     if (consoleRef.value && !isCollapsed.value) {
         const container = consoleRef.value
-        // 使用requestAnimationFrame确保在浏览器重绘前执行
         requestAnimationFrame(() => {
             container.scrollTop = container.scrollHeight
         })
@@ -64,18 +67,27 @@ const toggleCollapse = () => {
 </script>
 
 <style scoped>
+.console-container {
+    height: 86vh;
+    position: relative;
+    width: 100%;
+}
+
 .console-layout {
     background-color: #1e1e1e;
-    height: 86vh;
+    height: 100%;
     border: 1px solid #333;
     border-radius: 4px;
     display: flex;
     flex-direction: column;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     color: #d4d4d4;
-    transition: all 0.3s ease;
-    position: relative;
-    width: 100%;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 
 .console-layout.collapsed {
@@ -84,10 +96,10 @@ const toggleCollapse = () => {
     position: absolute;
     top: 0;
     right: 0;
-    z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    bottom: auto;
+    left: auto;
     transform-origin: top right;
-    transform: scale(0.9);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .console-header {
@@ -101,6 +113,7 @@ const toggleCollapse = () => {
     cursor: pointer;
     user-select: none;
     transition: background-color 0.2s;
+    flex-shrink: 0;
 }
 
 .console-header:hover {
@@ -127,6 +140,7 @@ const toggleCollapse = () => {
     font-size: 12px;
     cursor: pointer;
     transition: background-color 0.2s;
+    z-index: 1;
 }
 
 .clear-btn:hover {
@@ -142,6 +156,21 @@ const toggleCollapse = () => {
 
 .console-layout.collapsed .collapse-icon {
     transform: rotate(180deg);
+}
+
+.console-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.console-content.collapsed {
+    flex: 0;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
 }
 
 .console-context {
