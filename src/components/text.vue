@@ -1,10 +1,13 @@
 <template>
-    <div class="console-layout">
-        <div class="console-header">
+    <div class="console-layout" :class="{ collapsed: isCollapsed }">
+        <div class="console-header" @click="toggleCollapse">
             <span class="header-title">Console</span>
-            <!-- <button class="clear-btn" @click="clearMessages">Clear</button> -->
+            <!-- <button class="clear-btn" @click.stop="clearMessages">Clear</button> -->
+            <span class="collapse-icon">
+                {{ isCollapsed ? '▼' : '▲' }}
+            </span>
         </div>
-        <div class="console-context" ref="consoleRef">
+        <div class="console-context" ref="consoleRef" v-show="!isCollapsed">
             <div v-for="(msg, idx) in messages" :key="idx" class="message-line">
                 <span class="timestamp" v-if="showTimestamp">{{ formatTimestamp(msg.timestamp) }}</span>
                 <span class="message-content">{{ msg.content }}</span>
@@ -25,6 +28,7 @@ const messages = computed(() => wsStore.messages)
 
 const consoleRef = ref<HTMLElement | null>(null)
 const showTimestamp = ref(true)
+const isCollapsed = ref(false)
 
 // 当 messages 更新时，滚动到底部
 watch(messages, async () => {
@@ -34,7 +38,7 @@ watch(messages, async () => {
 
 // 滚动到底部
 const scrollToBottom = () => {
-    if (consoleRef.value) {
+    if (consoleRef.value && !isCollapsed.value) {
         const container = consoleRef.value
         // 使用requestAnimationFrame确保在浏览器重绘前执行
         requestAnimationFrame(() => {
@@ -46,6 +50,11 @@ const scrollToBottom = () => {
 // 格式化时间戳
 const formatTimestamp = (timestamp: number) => {
     return new Date(timestamp).toLocaleTimeString()
+}
+
+// 切换折叠状态
+const toggleCollapse = () => {
+    isCollapsed.value = !isCollapsed.value
 }
 
 // // 清空消息
@@ -64,6 +73,18 @@ const formatTimestamp = (timestamp: number) => {
     flex-direction: column;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     color: #d4d4d4;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.console-layout.collapsed {
+    height: auto;
+    width: 200px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .console-header {
@@ -74,6 +95,18 @@ const formatTimestamp = (timestamp: number) => {
     background-color: #2d2d30;
     border-bottom: 1px solid #3e3e42;
     border-radius: 4px 4px 0 0;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s;
+}
+
+.console-header:hover {
+    background-color: #38383b;
+}
+
+.console-layout.collapsed .console-header {
+    border-radius: 4px;
+    border-bottom: none;
 }
 
 .header-title {
@@ -97,6 +130,17 @@ const formatTimestamp = (timestamp: number) => {
     background-color: #1177bb;
 }
 
+.collapse-icon {
+    color: #cccccc;
+    font-size: 12px;
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+.console-layout.collapsed .collapse-icon {
+    transform: rotate(180deg);
+}
+
 .console-context {
     background-color: #e6e9e5;
     margin: 0;
@@ -107,6 +151,7 @@ const formatTimestamp = (timestamp: number) => {
     line-height: 1.4;
     scrollbar-width: thin;
     scrollbar-color: #c3c5c0 #a5aaa1;
+    transition: opacity 0.2s ease;
 }
 
 /* Webkit 浏览器滚动条样式 */
@@ -115,16 +160,17 @@ const formatTimestamp = (timestamp: number) => {
 }
 
 .console-context::-webkit-scrollbar-track {
-    background: #1e1e1e;
+    background: #f1f1f1;
+    border-radius: 4px;
 }
 
 .console-context::-webkit-scrollbar-thumb {
-    background-color: #424242;
+    background-color: #c3c5c0;
     border-radius: 4px;
 }
 
 .console-context::-webkit-scrollbar-thumb:hover {
-    background-color: #4a4a4a;
+    background-color: #a5aaa1;
 }
 
 .message-line {
@@ -137,7 +183,7 @@ const formatTimestamp = (timestamp: number) => {
 }
 
 .message-line:hover {
-    background-color: #2a2d2e;
+    background-color: #d8dbd7;
 }
 
 .timestamp {
@@ -151,6 +197,7 @@ const formatTimestamp = (timestamp: number) => {
 .message-content {
     flex: 1;
     overflow-wrap: break-word;
+    color: #333;
 }
 
 .empty-state {
