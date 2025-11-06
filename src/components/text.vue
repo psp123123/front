@@ -10,7 +10,7 @@
             <div class="console-content" :class="{ collapsed: isCollapsed }">
                 <div class="console-context" ref="consoleRef">
                     <div v-for="(msg, idx) in messages" :key="idx" class="message-line">
-                        <span class="timestamp" v-if="showTimestamp">{{ formatTimestamp(msg.timestamp) }}</span>
+                        <!-- <span class="timestamp" v-if="showTimestamp">{{ formatTimestamp(msg.timestamp) }}</span> -->
                         <span class="message-content">{{ msg.content }}</span>
                     </div>
                 </div>
@@ -49,10 +49,7 @@ const scrollToBottom = () => {
     }
 }
 
-// 格式化时间戳
-const formatTimestamp = (timestamp: number) => {
-    return new Date(timestamp).toLocaleTimeString()
-}
+
 </script>
 
 <style scoped>
