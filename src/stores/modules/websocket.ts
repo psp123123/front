@@ -38,6 +38,7 @@ export const useWebSocketStore = defineStore('websocket', () => {
     // 使用 URL 对象安全拼接 query 参数
     const url = new URL(opts.url, window.location.origin)
     console.log('-----测试拼接的url:', url.toString())
+    if (opts.tool) url.searchParams.set('tool', opts.tool)
     if (opts.user) url.searchParams.set('user', opts.user)
     if (opts.token) url.searchParams.set('token', opts.token)
 
