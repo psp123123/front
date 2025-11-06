@@ -50,21 +50,51 @@ const formatMessage = (msg: any) => {
     }
 }
 
-// 当 messages 更新时，滚动到底部
-watch(messages, async () => {
-    await nextTick()
-    scrollToBottom()
-})
+// 当 messages 更新时，滚动到底部 - 使用深度监听
+watch(
+    messages,
+    async (newMessages, oldMessages) => {
+        // 只有当有新消息时才滚动
+        if (newMessages.length > (oldMessages?.length || 0)) {
+            await nextTick()
+            scrollToBottom()
+        }
+    },
+    { deep: true, flush: 'post' }
+)
 
-// 滚动到底部
+// 滚动到底部 - 修复版本
 const scrollToBottom = () => {
     if (consoleRef.value && !isCollapsed.value) {
         const container = consoleRef.value
+
+        // 方法1: 直接设置scrollTop
+        container.scrollTop = container.scrollHeight
+
+        // 方法2: 使用requestAnimationFrame确保在渲染后执行
         requestAnimationFrame(() => {
             container.scrollTop = container.scrollHeight
+
+            // 方法3: 双重保险，延迟一小段时间再次检查
+            setTimeout(() => {
+                // 检查是否真的滚动到了底部
+                const isAtBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 1
+                if (!isAtBottom) {
+                    container.scrollTop = container.scrollHeight
+                }
+            }, 10)
         })
     }
 }
+
+// 添加对折叠状态变化的监听
+watch(isCollapsed, (newVal) => {
+    if (!newVal) { // 当从折叠状态展开时
+        nextTick(() => {
+            scrollToBottom()
+        })
+    }
+})
 </script>
 
 <style scoped>
@@ -115,7 +145,6 @@ const scrollToBottom = () => {
     border-radius: 4px 4px 0 0;
     cursor: pointer;
     user-select: none;
-    /* transition: all 0.2s; */
     flex-shrink: 0;
 }
 
@@ -169,6 +198,8 @@ const scrollToBottom = () => {
     line-height: 1.4;
     scrollbar-width: thin;
     scrollbar-color: #c3c5c0 #a5aaa1;
+    /* 确保滚动行为是即时的 */
+    scroll-behavior: auto;
 }
 
 /* Webkit 浏览器滚动条样式 */
