@@ -6,6 +6,7 @@ export interface WSOptions {
   url: string
   user?: string
   token?: string
+  tool: string
   heartbeatInterval?: number
   reconnectInterval?: number
 }

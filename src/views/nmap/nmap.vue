@@ -93,6 +93,7 @@ onMounted(async () => {
             url: wsUrl,
             user: userConfig.userInfo.username,
             token: localStorage.getItem('accessToken') as string,
+            tool: "nmap",
         })
     } else {
         console.warn('用户信息为空，无法建立 WebSocket 连接')
