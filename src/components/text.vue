@@ -2,7 +2,7 @@
     <div class="console-layout" :class="{ collapsed: isCollapsed }">
         <div class="console-header" @click="toggleCollapse">
             <span class="header-title">Console</span>
-            <button class="clear-btn" @click.stop="clearMessages">Clear</button>
+            <!-- <button class="clear-btn" @click.stop="clearMessages">Clear</button> -->
             <span class="collapse-icon">
                 {{ isCollapsed ? '▼' : '▲' }}
             </span>
@@ -57,10 +57,10 @@ const toggleCollapse = () => {
     isCollapsed.value = !isCollapsed.value
 }
 
-// 清空消息
-const clearMessages = () => {
-    wsStore.clearMessages()
-}
+// // 清空消息
+// const clearMessages = () => {
+//     wsStore.clearMessages()
+// }
 </script>
 
 <style scoped>
