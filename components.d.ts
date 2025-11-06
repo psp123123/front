@@ -35,6 +35,7 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Setting: typeof import('./src/components/Setting.vue')['default']
     Svg: typeof import('./src/components/svg/index.vue')['default']
+    Text: typeof import('./src/components/text.vue')['default']
     User: typeof import('./src/components/User.vue')['default']
     UserFormDialog: typeof import('./src/components/UserFormDialog.vue')['default']
     UserManageBar: typeof import('./src/components/UserManageBar.vue')['default']

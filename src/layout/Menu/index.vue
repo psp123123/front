@@ -20,7 +20,8 @@
                         </el-col>
 
                         <el-col :span="9" v-show="isWebsocket">
-                            <Websocket />
+                            <!-- <Websocket /> -->
+                            <textCustom />
                         </el-col>
                     </el-row>
 
@@ -38,6 +39,7 @@ import MenuBar from '@/components/MenuBar.vue'
 import useConfigStore from '@/stores/modules/config'
 import { constantroutes } from '@/router/route'
 import Websocket from '@/components/Websocket.vue'
+import textCustom from '@/components/text.vue'
 
 interface RouteMeta {
     title?: string
