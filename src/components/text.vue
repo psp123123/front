@@ -1,17 +1,33 @@
 <template>
-    <div class="console-layout"> <button class="console-header">console</button>
-        <div class="console-context">
+    <div class="console-layout">
+        <button class="console-header">console</button>
+        <div class="console-context" ref="consoleRef">
             <li v-for="(msg, idx) in messages" :key="idx">{{ msg }}</li>
         </div>
     </div>
 </template>
+
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch, nextTick } from 'vue'
 import { useWebSocketStore } from '@/stores/modules/websocket'
 
 const wsStore = useWebSocketStore()
 const messages = computed(() => wsStore.messages)
+
+const consoleRef = ref<HTMLElement | null>(null)
+
+// 当 messages 更新时，滚动到底部（平滑滚动）
+watch(messages, async () => {
+    await nextTick() // 等待 DOM 更新
+    if (consoleRef.value) {
+        consoleRef.value.scrollTo({
+            top: consoleRef.value.scrollHeight,
+            behavior: 'smooth' // 平滑滚动
+        })
+    }
+})
 </script>
+
 <style scoped>
 .console-header {
     margin: 5px;
@@ -29,12 +45,10 @@ const messages = computed(() => wsStore.messages)
     display: flex;
     flex-direction: column;
     transition: box-shadow 0.3s ease;
-    /* 阴影过渡 */
 }
 
 .console-layout:hover {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-    /* 鼠标悬停时更明显的阴影 */
 }
 
 .console-context {
@@ -42,9 +56,10 @@ const messages = computed(() => wsStore.messages)
     margin: 0px 6px 6px 6px;
     flex: 1;
     border-radius: 1%;
-    /* border-style: solid; */
     padding: 5px;
     overflow-y: auto;
     font-size: small;
+    scroll-behavior: smooth;
+    /* CSS 平滑滚动备选方案 */
 }
 </style>
