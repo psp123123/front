@@ -14,9 +14,9 @@
                         <span class="timestamp" v-if="showTimestamp">{{ formatTimestamp(msg.timestamp) }}</span>
                         <span class="message-content">{{ msg.content }}</span>
                     </div>
-                    <div v-if="messages.length === 0" class="empty-state">
+                    <!-- <div v-if="messages.length === 0" class="empty-state">
                         No messages yet
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -76,7 +76,7 @@ const toggleCollapse = () => {
 .console-layout {
     background-color: #1e1e1e;
     height: 100%;
-    border: 1px solid #333;
+    border: 0px solid #333;
     border-radius: 4px;
     display: flex;
     flex-direction: column;
@@ -88,10 +88,11 @@ const toggleCollapse = () => {
     left: 0;
     right: 0;
     bottom: 0;
+    /* overflow: hidden; */
 }
 
 .console-layout.collapsed {
-    height: auto;
+    height: 0;
     width: 200px;
     position: absolute;
     top: 0;
@@ -108,7 +109,7 @@ const toggleCollapse = () => {
     align-items: center;
     padding: 8px 12px;
     background-color: #2d2d30;
-    border-bottom: 1px solid #3e3e42;
+    border-bottom: 0px solid #3e3e42;
     border-radius: 4px 4px 0 0;
     cursor: pointer;
     user-select: none;
@@ -123,6 +124,7 @@ const toggleCollapse = () => {
 .console-layout.collapsed .console-header {
     border-radius: 4px;
     border-bottom: none;
+    border-top: none;
 }
 
 .header-title {
