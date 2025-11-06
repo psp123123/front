@@ -10,8 +10,7 @@
             <div class="console-content" :class="{ collapsed: isCollapsed }">
                 <div class="console-context" ref="consoleRef">
                     <div v-for="(msg, idx) in messages" :key="idx" class="message-line">
-                        <!-- <span class="timestamp" v-if="showTimestamp">{{ formatTimestamp(msg.timestamp) }}</span> -->
-                        <span class="message-content">{{ msg.content }}</span>
+                        <span class="message-content">{{ formatMessage(msg) }}</span>
                     </div>
                 </div>
             </div>
@@ -20,28 +19,42 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, nextTick, onMounted } from 'vue'
+import { computed, ref, watch, nextTick } from 'vue'
 import { useWebSocketStore } from '@/stores/modules/websocket'
 import useConfigStore from '@/stores/modules/config'
 
 const wsStore = useWebSocketStore()
-const messages = computed(() => {
-    console.log('Current messages:', wsStore.messages)
-    return wsStore.messages || []
-})
+const messages = computed(() => wsStore.messages)
 const useConfig = useConfigStore()
 const consoleRef = ref<HTMLElement | null>(null)
 
-console.log('---------------ws info:', messages)
 // 使用 computed 确保响应式
 const isCollapsed = computed(() => useConfig.isCollapsed)
 
+// 格式化消息内容
+const formatMessage = (msg: any) => {
+    if (msg.type === 'chat' && msg.payload) {
+        try {
+            // 尝试解析 payload 中的 JSON
+            const payload = JSON.parse(msg.payload)
+            return `Host: ${payload.host}, Scan Type: ${payload.scanType}`
+        } catch (e) {
+            // 如果解析失败，返回原始 payload
+            return msg.payload
+        }
+    } else if (msg.type === 'ping') {
+        return 'Ping received'
+    } else {
+        // 对于其他类型的消息，返回类型信息
+        return `Message type: ${msg.type}`
+    }
+}
+
 // 当 messages 更新时，滚动到底部
-watch(messages, async (newMessages) => {
-    console.log('Messages updated:', newMessages)
+watch(messages, async () => {
     await nextTick()
     scrollToBottom()
-}, { deep: true })
+})
 
 // 滚动到底部
 const scrollToBottom = () => {
@@ -52,13 +65,6 @@ const scrollToBottom = () => {
         })
     }
 }
-// 添加 mounted 钩子检查初始状态
-onMounted(() => {
-    console.log('Console component mounted')
-    console.log('Initial messages:', wsStore.messages)
-})
-
-
 </script>
 
 <style scoped>
