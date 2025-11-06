@@ -98,7 +98,7 @@ const formatTimestamp = (timestamp: number) => {
 }
 
 .console-context {
-    background-color: #1e1e1e;
+    background-color: #e6e9e5;
     margin: 0;
     flex: 1;
     padding: 8px 0;
@@ -106,7 +106,7 @@ const formatTimestamp = (timestamp: number) => {
     font-size: 13px;
     line-height: 1.4;
     scrollbar-width: thin;
-    scrollbar-color: #424242 #1e1e1e;
+    scrollbar-color: #c3c5c0 #a5aaa1;
 }
 
 /* Webkit 浏览器滚动条样式 */
