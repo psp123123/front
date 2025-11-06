@@ -36,7 +36,7 @@ onMounted(async () => {
   try {
     //从后端获取数据
     const userinfo = await getUserInfo()
-    username.value = userinfo.data.user
+    username.value = userinfo.data.username
 
 
 
