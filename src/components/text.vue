@@ -28,8 +28,8 @@ const wsStore = useWebSocketStore()
 const messages = computed(() => wsStore.messages)
 const useConfig = useConfigStore()
 const consoleRef = ref<HTMLElement | null>(null)
-const showTimestamp = ref(true)
 
+console.log('---------------ws info:', messages)
 // 使用 computed 确保响应式
 const isCollapsed = computed(() => useConfig.isCollapsed)
 
