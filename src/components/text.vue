@@ -37,6 +37,7 @@ const isCollapsed = computed(() => useConfig.isCollapsed)
 watch(messages, async () => {
     await nextTick()
     scrollToBottom()
+    console.log('---------------ws info:', messages)
 })
 
 // 滚动到底部
