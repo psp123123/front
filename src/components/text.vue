@@ -18,83 +18,143 @@
     </div>
 </template>
 
+
 <script setup lang="ts">
-import { computed, ref, watch, nextTick, onMounted } from 'vue'
+import { computed, ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { useWebSocketStore } from '@/stores/modules/websocket'
 import useConfigStore from '@/stores/modules/config'
 
+// stores
 const wsStore = useWebSocketStore()
-const messages = computed(() => wsStore.messages)
 const useConfig = useConfigStore()
+
+// reactive refs
 const consoleRef = ref<HTMLElement | null>(null)
-
 const isCollapsed = computed(() => useConfig.isCollapsed)
+const messages = computed(() => wsStore.messages) // 假定 store 中 messages 是一个可变数组
 
-// 格式化消息内容
-const formatMessage = (msg: any) => {
-    if (msg.type === 'chat' && msg.payload) {
-        try {
-            const payload = JSON.parse(msg.payload)
-            return `Host: ${payload.host}, Scan Type: ${payload.scanType}`
-        } catch (e) {
-            return msg.payload
-        }
-    } else if (msg.type === 'ping') {
-        return 'Ping received'
-    } else {
-        return `Message type: ${msg.type}`
+// ------- 消息解析 / 格式化工具 ------- //
+const tryParseJSON = (maybeJson: any) => {
+    if (typeof maybeJson !== 'string') return { ok: false, data: maybeJson }
+    try {
+        return { ok: true, data: JSON.parse(maybeJson) }
+    } catch (e) {
+        return { ok: false, data: maybeJson }
     }
 }
 
-// 强制滚动到底部的函数
+/**
+ * formatMessage：把后端可能的三种形式（string | JSON-string | object）统一格式化为展示文本
+ * 支持类型：
+ * - plain text: "Starting Nmap ..."
+ * - JSON object: { type: 'stream', stream:'stdout', line:'...' }
+ * - JSON wrapper where payload is a stringified JSON: { type:'hacktool', payload: "{\"host\":\"...\"}" }
+ */
+const formatMessage = (msg: any) => {
+    if (msg === null || msg === undefined) return ''
+
+    // 如果是字符串，尝试把它解析为 JSON，如果能解析递归处理，否则当普通行处理
+    if (typeof msg === 'string') {
+        const parsed = tryParseJSON(msg)
+        if (parsed.ok) return formatMessage(parsed.data)
+        return msg
+    }
+
+    // 如果是对象
+    if (typeof msg === 'object') {
+        // 常见流式输出
+        if (msg.type === 'stream' && (msg.line !== undefined || msg.data !== undefined)) {
+            const line = msg.line ?? msg.data ?? ''
+            const stream = msg.stream ?? 'stdout'
+            return `[${stream}] ${line}`
+        }
+
+        // 你的 hacktool 请求那种形式：payload 可能是 string，也可能是 object
+        if (msg.type === 'hacktool' || msg.type === 'exec' || msg.type === 'task') {
+            const p = msg.payload
+            if (typeof p === 'string') {
+                const parsedPayload = tryParseJSON(p)
+                if (parsedPayload.ok && typeof parsedPayload.data === 'object') {
+                    const pd = parsedPayload.data
+                    // 根据字段显示更友好
+                    return `Task ${msg.type}: host=${pd.host ?? '-'} scanType=${pd.scanType ?? '-'}`
+                }
+                return `Task ${msg.type}: ${p}`
+            } else if (typeof p === 'object' && p !== null) {
+                return `Task ${msg.type}: host=${p.host ?? '-'} scanType=${p.scanType ?? '-'}`
+            } else {
+                return `Task ${msg.type}: ${JSON.stringify(msg)}`
+            }
+        }
+
+        // 最终结果类型
+        if (msg.type === 'result' || msg.status) {
+            try {
+                return `Result: ${JSON.stringify(msg)}`
+            } catch {
+                return String(msg)
+            }
+        }
+
+        // 如果对象里有 line 字段（后端可能直接发 {line:"..."}）
+        if (msg.line) {
+            return msg.line
+        }
+
+        // 兜底：把对象序列化为较短 JSON
+        try {
+            return JSON.stringify(msg)
+        } catch (e) {
+            return String(msg)
+        }
+    }
+
+    // 兜底返回
+    return String(msg)
+}
+
+// ------- 滚动逻辑 ------- //
 const scrollToBottom = () => {
-    if (!consoleRef.value || isCollapsed.value) return;
-
-    // 使用 requestAnimationFrame 确保在DOM渲染后执行
+    if (!consoleRef.value || isCollapsed.value) return
     requestAnimationFrame(() => {
-        const container = consoleRef.value;
-        if (!container) return;
-
+        const container = consoleRef.value
+        if (!container) return
         // 平滑滚动到底部
         container.scrollTo({
             top: container.scrollHeight,
             behavior: 'smooth'
-        });
-    });
-};
+        })
+    })
+}
 
-// 组件挂载时初始化滚动
-onMounted(() => {
-    scrollToBottom();
-});
-
-// 优化后的消息监听器
+// 在消息变更时滚动到底部（deep: true）
 watch(
     messages,
-    async (newMessages) => {
-        // 确保DOM更新完成
-        await nextTick();
-
-        // 新消息到达时总是尝试滚动
+    async () => {
+        // 等 DOM 更新完成
+        await nextTick()
         if (!isCollapsed.value) {
-            // 延迟滚动确保内容渲染完成
-            setTimeout(() => {
-                scrollToBottom();
-            }, 50);
+            // 小延迟，保证行内高度稳定后再滚
+            setTimeout(() => scrollToBottom(), 40)
         }
     },
     { deep: true, immediate: true }
-);
+)
 
-// 初始加载时滚动到底部
+// 当折叠状态切换为展开时也滚到底
 watch(
     () => isCollapsed.value,
     (collapsed) => {
         if (!collapsed) {
-            nextTick(scrollToBottom);
+            nextTick(() => setTimeout(scrollToBottom, 30))
         }
     }
-);
+)
+
+// onMounted 初次滚动
+onMounted(() => {
+    nextTick(() => setTimeout(scrollToBottom, 50))
+})
 </script>
 
 <style scoped>
