@@ -67,6 +67,7 @@ const nmapPinia = useNmapStore()
 
 const textarea2 = ref('')
 const radio1 = ref('-sS')
+const extra1 = ref()
 
 
 const protocol = import.meta.env.VITE_WS_PROTOCOL
@@ -112,10 +113,11 @@ const nmapVerify = () => {
 
     const payload = JSON.stringify({
         host: textarea2.value,
-        scanType: radio1.value
+        scanType: radio1.value,
+        extra1: extra1.value
     })
 
-    const msg: WSMessage = { type: 'chat', payload }
+    const msg: WSMessage = { type: 'hacktool', payload, extend1: "string", extend2: "string" }
     wsStore.sendMessage(msg)
 
 }
