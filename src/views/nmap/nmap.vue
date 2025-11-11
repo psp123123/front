@@ -67,7 +67,7 @@ const nmapPinia = useNmapStore()
 
 const textarea2 = ref('')
 const radio1 = ref('-sS')
-const extra1 = ref()
+const extra1 = ref('')
 
 
 const protocol = import.meta.env.VITE_WS_PROTOCOL
