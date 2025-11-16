@@ -13,7 +13,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import globalCostomComponents from '@/components/'
 import useConfigStore from './stores/modules/config'
-
+import { ElMessage } from 'element-plus'
 const app = createApp(App)
 
 const pinia = createPinia()
@@ -23,6 +23,7 @@ app.use(globalCostomComponents)
 app.use(pinia)
 app.use(router)
 app.use(ElementPlus, { size: 'small', zIndex: 3000, locale: zhCn })
+app.config.globalProperties.$message = ElMessage
 app.use(VXEUI) // 注册PC UI组件
 app.use(VXETable) // 注册表格组件
 // svg插件
