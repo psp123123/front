@@ -19,12 +19,21 @@ export const constantroutes = [
     ],
   },
 
-  // 登录页
+  // 基本信息搜集
   {
-    path: '/login',
-    name: 'login',
-    component: () => import('@/views/Login.vue'),
-    meta: { title: 'Login', hidden: true, hideLayout: true, manager: false, isWebsocket: false },
+    path: '/basic',
+    name: 'basic',
+    commponent: MainLayout,
+    // component: () => import('@/views/basicCollection.vue'),
+    meta: { title: '基本信息', hidden: false, manager: false },
+    children: [
+      {
+        path: 'collection',
+        name: 'collection',
+        component: () => import('@/views/basicCollection.vue'),
+        meta: { title: '基本信息', hidden: false, manager: false, isWebsocket: true },
+      },
+    ],
   },
 
   // 信息收集菜单
@@ -101,5 +110,12 @@ export const constantroutes = [
     name: 'NotFound',
     component: () => import('@/views/NotFound.vue'),
     meta: { title: 'Not Found', hidden: true, manager: false, isWebsocket: false },
+  },
+  // 登录页
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/Login.vue'),
+    meta: { title: 'Login', hidden: true, hideLayout: true, manager: false, isWebsocket: false },
   },
 ]
