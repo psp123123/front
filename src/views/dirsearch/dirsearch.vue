@@ -388,7 +388,7 @@ const confirmUpload = async () => {
     if (uploadedFiles.value.length > 0) {
         const file = uploadedFiles.value[0].raw
         const text = await file.text()
-        if (ElMessage) ElMessage.success(`已加载 ${file.name}，共 ${text.split('\n').filter(l => l.trim()).length} 条路径`)
+        if (ElMessage) ElMessage.success(`已加载 ${file.name}，共 ${text.split('\n').filter((l: string) => l.trim()).length} 条路径`)
         showUploadDialog.value = false
         uploadedFiles.value = []
     }
