@@ -23,7 +23,7 @@ export const constantroutes = [
   {
     path: '/basic',
     name: 'basic',
-    commponent: MainLayout,
+    component: MainLayout,
     // component: () => import('@/views/basicCollection.vue'),
     meta: { title: '基本信息', hidden: false, manager: false },
     children: [
