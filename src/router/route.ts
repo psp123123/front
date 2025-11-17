@@ -25,13 +25,13 @@ export const constantroutes = [
     name: 'basic',
     component: MainLayout,
     // component: () => import('@/views/basicCollection.vue'),
-    meta: { title: '基本信息', hidden: false, manager: false },
+    meta: { title: '目标测绘', hidden: false, manager: false },
     children: [
       {
         path: 'collection',
         name: 'collection',
-        component: () => import('@/views/basicCollection.vue'),
-        meta: { title: '基本信息', hidden: false, manager: false, isWebsocket: true },
+        component: () => import('@/views/basicCollection/basicCollection.vue'),
+        meta: { title: '目标测绘', hidden: false, manager: false, isWebsocket: true },
       },
     ],
   },

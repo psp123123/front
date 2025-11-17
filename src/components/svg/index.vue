@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- 组件内容 -->
-        <svg>
+        <svg :width="size" :height="size">
             <use :href="prefix + name"></use>
         </svg>
     </div>
@@ -13,7 +13,14 @@ defineProps({
         type: String,
         default: "#icon-"
     },
-    name: String
+    name: {
+        type: String,
+        required: true,
+    },
+    size: {
+        type: [Number, String],
+        default: 20,
+    },
 })
 </script>
 

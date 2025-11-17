@@ -3,31 +3,61 @@
         <el-header class="header">
             <span>Fleet Pilot</span>
         </el-header>
-
         <div class="main-container">
             <el-row class="flex-row" :gutter="5">
-                <el-col :span="8" class="url-list">
+                <el-col :span="12" class="url-list">
                     <div class="flex flex-wrap gap-4">
                         <el-card class="url-list-card">
                             <!-- url列表 -->
-                            <span>url列表</span>
+                            <div class="url-list-header">
+                                <span>url列表</span>
+                                <div>
+
+                                    <el-button class="!ml-0" @click="openDialog">
+                                        <SvgIcon name="add" class="add-icon" />
+                                    </el-button>
+                                </div>
+
+                            </div>
                             <el-table :data="urlList">
                                 <el-table-column fixed prop="date" label="Date" width="90" />
-
                                 <el-table-column fixed prop="url" label="url" width="150" />
+                                <el-table-column prop="injection" label="injection" width="150">
+                                    <template #default="{ row }">
+                                        <el-tooltip placement="top" popper-class="injection-popper" :show-after="200">
+                                            <!-- 触发区域：表格只显示第一条 -->
+                                            <template #default>
+                                                <span class="cell-text">
+                                                    {{ row.injection[0] }}{{ row.injection.length > 1 ? ' ...' : '' }}
+                                                </span>
+                                            </template>
+                                            <!-- 悬浮框内容 -->
+                                            <template #content>
+                                                <div class="tooltip-container">
+                                                    <div v-for="(item, index) in row.injection" :key="index"
+                                                        class="tooltip-item" @click.stop="copyItem(item)">
+                                                        {{ item }}
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </el-tooltip>
+                                    </template>
+                                </el-table-column>
+
                                 <el-table-column fixed="right" label="Operations" min-width="50">
                                     <template #default>
                                         <el-button link type="primary" size="small" @click="handleClick">
                                             Detail
                                         </el-button>
-                                        <el-button link type="primary" size="small">Edit</el-button>
+                                        <el-button link type="primary" size="small"
+                                            @click="editDialogEvent">Edit</el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
                         </el-card>
                     </div>
                 </el-col>
-                <el-col :span="16" class="url-info">
+                <el-col :span="12" class="url-info">
                     <el-card class="url-info-card">
                         <template #header>
                             <div class="card-header">
@@ -82,25 +112,62 @@
                             </el-col>
                         </el-row>
                     </el-card>
-
                 </el-col>
             </el-row>
         </div>
-
     </div>
+    <!-- ========== 新增/编辑弹窗 ========== -->
+    <!-- <UrlEditDialog v-model="dialogVisible" :date="editingData" @save="handleSave" @cancel="handleCancel" /> -->
+    <EditDialog v-model="customDraggingVisible" />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-interface urlListType {
-    date: string
-    url: string
-}
-const urlList = ref<urlListType[]>([{
-    date: '2016-05-03',
-    url: 'xxx.example.com',
+import { ref, h } from 'vue';
+import { ElMessage } from 'element-plus'
+// 弹窗新增组件
+import EditDialog from '@/views/basicCollection/edit.vue'
+const customDraggingVisible = ref(false)
+function openDialog() {
+    console.log('尝试打开弹窗')
+    customDraggingVisible.value = true
 
-}])
+}
+
+// 弹窗编辑组件
+function editDialogEvent() {
+    console.log('编辑页面打开')
+    customDraggingVisible.value = true
+}
+type UrlItem = {
+    id: number,
+    date: string,
+    url: string
+    injection: string[]
+}
+
+function copyItem(text: string) {
+    navigator.clipboard.writeText(text)
+    ElMessage.success('已复制: ' + text)
+}
+
+
+const urlList = ref<UrlItem[]>([
+    {
+        id: 1,
+        date: '2016-05-03',
+        url: 'xxx.example.com',
+        injection: ['/admin&id=12', '/admin&id=12', '/admin&id=12 '],
+
+    },
+    {
+        id: 2,
+        date: '2016-05-03',
+        url: 'xxx.example.com',
+        injection: ['/admin&id=12', '/admin&id=12', '/admin&id=12 '],
+
+    }
+])
+
 const currentUrl = ref('xxx.example.com')
 function handleClick() {
     console.log('output')
@@ -108,6 +175,13 @@ function handleClick() {
 </script>
 
 <style scoped>
+p {
+    margin: 10px;
+    padding: 0;
+}
+
+
+
 .top-container {
     box-sizing: border-box;
     padding: 1px;
@@ -193,12 +267,57 @@ function handleClick() {
     display: flex;
 }
 
+/* 添加点击按钮 */
+.add-icon {
+    /* ✅ 基础样式 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    /* height: 28px; */
+    border-radius: 6px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #409eff;
+    padding: 4px;
+    /* 扩大可点击区域 */
+    margin: 0;
+
+    /* ✅ 禁用默认 outline（但保留聚焦态！） */
+    outline: none;
+
+    /* ✅ 过渡动画 */
+    transition:
+        background-color 0.2s,
+        transform 0.1s,
+        box-shadow 0.2s;
+}
+
+.add-icon:hover {
+    background-color: #ecf5ff;
+    color: #66b1ff;
+}
+
+.add-icon:focus-visible {
+    box-shadow: 0 0 0 2px #409eff33, 0 0 0 4px #409eff1a;
+    /* 内阴影 + 外发光，美观且符合 WCAG */
+}
+
+
 .doamin-info>.el-col,
 .doamin-info-col {
     background-color: #d1d9df;
     display: flex;
     flex-direction: column;
     flex: 1;
+}
+
+.url-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px 10px 0;
 }
 
 /* 各类信息 */
