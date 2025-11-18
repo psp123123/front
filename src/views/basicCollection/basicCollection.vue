@@ -12,17 +12,21 @@
                             <div class="url-list-header">
                                 <span>url列表</span>
                                 <div>
+                                    <el-popover placement="right" title="添加URL" :width="50" trigger="hover">
+                                        <template #reference>
+                                            <el-button class="!ml-0" @click="openDialog">
+                                                <SvgIcon name="add" class="add-icon" />
+                                            </el-button>
+                                        </template>
+                                    </el-popover>
 
-                                    <el-button class="!ml-0" @click="openDialog">
-                                        <SvgIcon name="add" class="add-icon" />
-                                    </el-button>
                                 </div>
 
                             </div>
                             <el-table :data="urlList">
                                 <el-table-column fixed prop="date" label="Date" width="90" />
                                 <el-table-column fixed prop="url" label="url" width="150" />
-                                <el-table-column prop="injection" label="injection" width="150">
+                                <el-table-column prop="injection" label="注入点" width="120">
                                     <template #default="{ row }">
                                         <el-tooltip placement="top" popper-class="injection-popper" :show-after="200">
                                             <!-- 触发区域：表格只显示第一条 -->
@@ -43,6 +47,7 @@
                                         </el-tooltip>
                                     </template>
                                 </el-table-column>
+                                <el-table-column fixed prop="tag" label="Tag" width="50"></el-table-column>
 
                                 <el-table-column fixed="right" label="Operations" min-width="50">
                                     <template #default>
@@ -143,6 +148,7 @@ type UrlItem = {
     date: string,
     url: string
     injection: string[]
+    tag: string
 }
 
 function copyItem(text: string) {
@@ -157,6 +163,7 @@ const urlList = ref<UrlItem[]>([
         date: '2016-05-03',
         url: 'xxx.example.com',
         injection: ['/admin&id=12', '/admin&id=12', '/admin&id=12 '],
+        tag: "url",
 
     },
     {
@@ -164,7 +171,7 @@ const urlList = ref<UrlItem[]>([
         date: '2016-05-03',
         url: 'xxx.example.com',
         injection: ['/admin&id=12', '/admin&id=12', '/admin&id=12 '],
-
+        tag: "xss"
     }
 ])
 

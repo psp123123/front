@@ -6,12 +6,15 @@
                 <el-input v-model="form.url" placeholder="输入检测URL" />
             </el-form-item>
 
-            <el-form-item label="注入点类型">
+            <el-form-item label="类型">
                 <el-select v-model="form.injectionType" placeholder="选择类型">
                     <el-option label="查询参数注入" value="query" />
                     <el-option label="路径参数注入" value="path" />
                     <el-option label="主机头注入" value="host" />
                 </el-select>
+            </el-form-item>
+            <el-form-item label="路径">
+                <el-input v-model="form.injectionTag" placeholder="/xxx/xxx?id=xx"></el-input>
             </el-form-item>
         </el-form>
 
@@ -27,7 +30,7 @@ import { ref, watch } from "vue";
 
 const props = defineProps<{
     modelValue: boolean;
-    defaultData?: { url: string; injectionType: string };
+    defaultData?: { url: string; injectionType: string; injectionTag: string };
 }>();
 
 const emit = defineEmits(["update:modelValue", "confirm"]);
@@ -39,6 +42,7 @@ const isVisible = ref(false);
 const form = ref({
     url: "",
     injectionType: "",
+    injectionTag: "",
 });
 
 // =========================
