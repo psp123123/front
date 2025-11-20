@@ -168,7 +168,7 @@ onMounted(async () => {
     try {
 
         // 发起get请求
-        const urlListData = await request.get('/tt-api/api/collection/urlget')
+        const urlListData = await request.get('/api/collection/urlget')
         console.log("url获取列表成功", urlListData)
     } catch (error) {
         console.error("url 获取列表失败", error);
