@@ -127,7 +127,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, h } from 'vue';
+import { ref, h, onMounted } from 'vue';
 import { ElMessage } from 'element-plus'
 // 弹窗新增组件
 import EditDialog from '@/views/basicCollection/edit.vue'
@@ -143,37 +143,55 @@ function editDialogEvent() {
     console.log('编辑页面打开')
     customDraggingVisible.value = true
 }
-type UrlItem = {
-    id: number,
-    date: string,
-    url: string
-    injection: string[]
-    tag: string
-}
 
 function copyItem(text: string) {
     navigator.clipboard.writeText(text)
     ElMessage.success('已复制: ' + text)
 }
 
+import request from '@/utils/auth'
 
-const urlList = ref<UrlItem[]>([
-    {
-        id: 1,
-        date: '2016-05-03',
-        url: 'xxx.example.com',
-        injection: ['/admin&id=12', '/admin&id=12', '/admin&id=12 '],
-        tag: "url",
+type UrlItem = {
+    id: number
+    date: string
+    url: string
+    injection: string[]
+    tag: string
+}
 
-    },
-    {
-        id: 2,
-        date: '2016-05-03',
-        url: 'xxx.example.com',
-        injection: ['/admin&id=12', '/admin&id=12', '/admin&id=12 '],
-        tag: "xss"
+// 定义响应式数据urlList
+const urlList = ref<UrlItem[]>([])
+
+// 发起获取列表数据请求，请求接口: /tt-api/api/collection/urlget
+
+onMounted(async () => {
+    try {
+
+        // 发起get请求
+        const urlListData = await request.get('/tt-api/api/collection/urlget')
+        console.log("url获取列表成功", urlListData)
+    } catch (error) {
+        console.error("url 获取列表失败", error);
+
     }
-])
+})
+// const urlList = ref<UrlItem[]>([
+//     {
+//         id: 1,
+//         date: '2016-05-03',
+//         url: 'xxx.example.com',
+//         injection: ['/admin&id=12', '/admin&id=12', '/admin&id=12 '],
+//         tag: "url",
+
+//     },
+//     {
+//         id: 2,
+//         date: '2016-05-03',
+//         url: 'xxx.example.com',
+//         injection: ['/admin&id=12', '/admin&id=12', '/admin&id=12 '],
+//         tag: "xss"
+//     }
+// ])
 
 const currentUrl = ref('xxx.example.com')
 function handleClick() {

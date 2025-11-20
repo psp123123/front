@@ -14,3 +14,16 @@
 	"injectionPath": "/path1/path2?id=11"
 }
 ```
+
+- 获取url列表信息[get],后端接口：/tt-api/api/collection/urlget 响应数据格式
+
+```json
+{
+  "code": 200,
+  "data": {
+    "url": "xxx",
+    "injectionType": "xxx",
+    "injectionPath": "xxx"
+  }
+}
+```
