@@ -170,11 +170,13 @@ onMounted(async () => {
         // 发起get请求
         const urlListData = await request.get('/api/collection/urlget')
         console.log("url获取列表成功", urlListData)
+        urlList.value = urlListData.data.urllist
     } catch (error) {
         console.error("url 获取列表失败", error);
 
     }
 })
+
 // const urlList = ref<UrlItem[]>([
 //     {
 //         id: 1,
