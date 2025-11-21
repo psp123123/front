@@ -42,7 +42,7 @@
                                     <template #default="scope">
 
                                         <el-button link type="primary" size="small" @click="editDialogEvent">
-                                            <SvgIcon name="edit"></SvgIcon>Edit
+                                            <SvgIcon name="bianji"></SvgIcon>Edit
                                         </el-button>
                                     </template>
                                 </el-table-column>
