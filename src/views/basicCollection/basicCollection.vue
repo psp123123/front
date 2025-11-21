@@ -39,8 +39,8 @@
                                     min-width="10%"></el-table-column>
 
                                 <el-table-column fixed="right" label="操作" min-width="15%">
-                                    <template #default>
-                                        <el-button link type="primary" size="small" @click="handleClick">
+                                    <template #default="scope">
+                                        <el-button link type="primary" size="small" @click="handleClick(scope.row)">
                                             Detail
                                         </el-button>
                                         <el-button link type="primary" size="small"
@@ -133,11 +133,6 @@ function editDialogEvent() {
     customDraggingVisible.value = true
 }
 
-function copyItem(text: string) {
-    navigator.clipboard.writeText(text)
-    ElMessage.success('已复制: ' + text)
-}
-
 import request from '@/utils/auth'
 
 type UrlItem = {
@@ -146,47 +141,29 @@ type UrlItem = {
     url: string
     injection: string[]
     tag: string
+    domains: string[]       // 从详情看，需要这个字段
+    ports: number[]
 }
 
 // 定义响应式数据urlList
 const urlList = ref<UrlItem[]>([])
 
 // 发起获取列表数据请求，请求接口: /tt-api/api/collection/urlget
-
 onMounted(async () => {
     try {
-
         // 发起get请求
         const urlListData = await request.get('/api/collection/urlget')
         console.log("url获取列表成功", urlListData)
         urlList.value = urlListData.data.urllist
     } catch (error) {
         console.error("url 获取列表失败", error);
-
     }
 })
 
-// const urlList = ref<UrlItem[]>([
-//     {
-//         id: 1,
-//         date: '2016-05-03',
-//         url: 'xxx.example.com',
-//         injection: ['/admin&id=12', '/admin&id=12', '/admin&id=12 '],
-//         tag: "url",
-
-//     },
-//     {
-//         id: 2,
-//         date: '2016-05-03',
-//         url: 'xxx.example.com',
-//         injection: ['/admin&id=12', '/admin&id=12', '/admin&id=12 '],
-//         tag: "xss"
-//     }
-// ])
-
 const currentUrl = ref('xxx.example.com')
-function handleClick() {
-    console.log('output')
+
+function handleClick(row: any) {
+    console.log("选中的数据行", row)
 }
 
 </script>
