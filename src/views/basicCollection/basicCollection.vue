@@ -32,13 +32,14 @@
                                             <!-- 触发区域：表格只显示第一条 -->
                                             <template #default>
                                                 <span class="cell-text">
-                                                    {{ row.injection[0] }}{{ row.injection.length > 1 ? ' ...' : '' }}
+                                                    {{ row.injectionPath[0] }}{{ row.injectionPath.length > 1 ? ' ...' :
+                                                        '' }}
                                                 </span>
                                             </template>
                                             <!-- 悬浮框内容 -->
                                             <template #content>
                                                 <div class="tooltip-container">
-                                                    <div v-for="(item, index) in row.injection" :key="index"
+                                                    <div v-for="(item, index) in row.injectionPath" :key="index"
                                                         class="tooltip-item" @click.stop="copyItem(item)">
                                                         {{ item }}
                                                     </div>
