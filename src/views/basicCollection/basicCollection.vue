@@ -26,29 +26,7 @@
                             <el-table :data="urlList">
                                 <el-table-column fixed prop="date" label="Date" width="90" />
                                 <el-table-column fixed prop="url" label="url" width="150" />
-                                <el-table-column prop="injectionPath" label="注入点" width="150">
-                                    <template #default="{ row }">
-                                        <el-tooltip placement="top" popper-class="injection-popper" :show-after="200">
-                                            <!-- 触发区域：表格只显示第一条 -->
-                                            <template #default>
-                                                <span class="cell-text">
-                                                    {{ row.injectionPath[0] }}{{ row.injectionPath.length > 50 ? ' ...'
-                                                        :
-                                                        '' }}
-                                                </span>
-                                            </template>
-                                            <!-- 悬浮框内容 -->
-                                            <template #content>
-                                                <div class="tooltip-container">
-                                                    <div v-for="(item, index) in row.injectionPath" :key="index"
-                                                        class="tooltip-item" @click.stop="copyItem(item)">
-                                                        {{ item }}
-                                                    </div>
-                                                </div>
-                                            </template>
-                                        </el-tooltip>
-                                    </template>
-                                </el-table-column>
+                                <el-table-column prop="injectionPath" label="注入点" width="150"></el-table-column>
                                 <el-table-column fixed prop="injectionType" label="Tag" width="50"></el-table-column>
 
                                 <el-table-column fixed="right" label="Operations" min-width="50">
