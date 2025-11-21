@@ -24,7 +24,7 @@
 
                             </div>
                             <el-table :data="urlList">
-                                <el-table-column fixed prop="date" label="Date" min-width="20%" />
+                                <el-table-column fixed prop="date" label="Date" min-width="15%" />
                                 <el-table-column fixed prop="url" label="url" min-width="20%" />
                                 <el-table-column prop="injectionPath" label="注入点" min-width="20%">
                                     <template #default="{ row }">
@@ -36,9 +36,9 @@
                                     </template>
                                 </el-table-column>
                                 <el-table-column fixed prop="injectionType" label="Tag"
-                                    wmin-width="10%"></el-table-column>
+                                    min-width="10%"></el-table-column>
 
-                                <el-table-column fixed="right" label="Operations" min-width="30%">
+                                <el-table-column fixed="right" label="操作" min-width="15%">
                                     <template #default>
                                         <el-button link type="primary" size="small" @click="handleClick">
                                             Detail
