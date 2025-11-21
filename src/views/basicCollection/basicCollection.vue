@@ -167,7 +167,7 @@ function handleClick(row: any) {
 }
 
 function deleteUrlData(row: any) {
-    console.log("删除选中数据", row)
+    console.log("删除选中数据", row.id)
 }
 </script>
 
