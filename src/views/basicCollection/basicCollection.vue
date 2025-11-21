@@ -26,7 +26,7 @@
                             <el-table :data="urlList">
                                 <el-table-column fixed prop="date" label="Date" width="90" />
                                 <el-table-column fixed prop="url" label="url" width="150" />
-                                <el-table-column prop="injection" label="注入点" width="120">
+                                <el-table-column prop="injectionPath" label="注入点" width="120">
                                     <template #default="{ row }">
                                         <el-tooltip placement="top" popper-class="injection-popper" :show-after="200">
                                             <!-- 触发区域：表格只显示第一条 -->
@@ -47,7 +47,7 @@
                                         </el-tooltip>
                                     </template>
                                 </el-table-column>
-                                <el-table-column fixed prop="tag" label="Tag" width="50"></el-table-column>
+                                <el-table-column fixed prop="injectionType" label="Tag" width="50"></el-table-column>
 
                                 <el-table-column fixed="right" label="Operations" min-width="50">
                                     <template #default>
