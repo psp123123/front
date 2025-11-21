@@ -42,7 +42,10 @@
                                     <template #default="scope">
 
                                         <el-button link type="primary" size="small" @click="editDialogEvent">
-                                            <SvgIcon name="bianji"></SvgIcon>Edit
+                                            <SvgIcon name="bianji"></SvgIcon>
+                                        </el-button>
+                                        <el-button link type="danger" size="small" @click="deleteUrlData">
+                                            <SvgIcon name="shanchu"></SvgIcon>
                                         </el-button>
                                     </template>
                                 </el-table-column>
@@ -163,6 +166,9 @@ function handleClick(row: any) {
     }
 }
 
+function deleteUrlData() {
+    console.log("删除选中数据")
+}
 </script>
 
 <style scoped>
