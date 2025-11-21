@@ -60,47 +60,37 @@
                         </template>
                         <el-row class="domain-info fill-height" :gutter="10">
                             <!-- Domain Info Card -->
-                            <el-col :span="8" class="domain-info-col">
+                            <el-col :span="8" class="domain-info-col" v-if="selectedRow">
                                 <div class="info-card">
                                     <h4 class="info-title">Domain Info</h4>
                                     <el-text class="info-content" type="primary" tag="div">
-                                        admin.example.com<br />
-                                        api.example.com<br />
-                                        dev.example.com<br />
-                                        test.example.com<br />
-                                        vpn.example.com<br />
-                                        mail.example.com<br />
-                                        cdn.example.com
+                                        <div v-for="(domain, index) in selectedRow.domains" :key="index">
+                                            {{ domain }}<br />
+                                        </div>
                                     </el-text>
                                 </div>
                             </el-col>
 
                             <!-- Port Info Card -->
-                            <el-col :span="8">
+                            <el-col :span="8" v-if="selectedRow">
                                 <div class="info-card">
                                     <h4 class="info-title">Port Info</h4>
                                     <el-text class="info-content" type="primary" tag="div">
-                                        80 (HTTP)<br />
-                                        443 (HTTPS)<br />
-                                        22 (SSH)<br />
-                                        3306 (MySQL)<br />
-                                        6379 (Redis)<br />
-                                        27017 (MongoDB)
+                                        <div v-for="(port, index) in selectedRow.ports" :key="index">
+                                            {{ port }}<br />
+                                        </div>
                                     </el-text>
                                 </div>
                             </el-col>
 
                             <!-- Directory Info Card -->
-                            <el-col :span="8">
+                            <el-col :span="8" v-if="selectedRow">
                                 <div class="info-card">
                                     <h4 class="info-title">Directory Info</h4>
                                     <el-text class="info-content" type="primary" tag="div">
-                                        /admin/<br />
-                                        /api/v1/<br />
-                                        /static/<br />
-                                        /uploads/<br />
-                                        /backup/<br />
-                                        /.git/
+                                        <div v-for="(dir, index) in selectedRow.injectionPath" :key="index">
+                                            {{ dir }}<br />
+                                        </div>
                                     </el-text>
                                 </div>
                             </el-col>
@@ -148,6 +138,9 @@ type UrlItem = {
 // 定义响应式数据urlList
 const urlList = ref<UrlItem[]>([])
 
+// 定义当前行数据
+const selectedRow = ref<any>(null);
+
 // 发起获取列表数据请求，请求接口: /tt-api/api/collection/urlget
 onMounted(async () => {
     try {
@@ -162,10 +155,12 @@ onMounted(async () => {
 
 const currentUrl = ref('')
 
+
 function handleClick(row: any) {
     console.log("选中的数据行", row)
     if (row) {
         currentUrl.value = row.url
+        selectedRow.value = row
     }
 }
 

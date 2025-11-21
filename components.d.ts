@@ -33,7 +33,6 @@ declare module 'vue' {
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElText: typeof import('element-plus/es')['ElText']
-    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     HeadBar: typeof import('./src/components/HeadBar.vue')['default']
     Home: typeof import('./src/components/Home.vue')['default']
     Loading: typeof import('./src/components/loading/index.vue')['default']
