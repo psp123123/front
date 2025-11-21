@@ -26,7 +26,15 @@
                             <el-table :data="urlList">
                                 <el-table-column fixed prop="date" label="Date" width="90" />
                                 <el-table-column fixed prop="url" label="url" width="150" />
-                                <el-table-column prop="injectionPath" label="注入点" width="150"></el-table-column>
+                                <el-table-column prop="injectionPath" label="注入点" width="150">
+                                    <template #default="{ row }">
+                                        <div class="multi-line">
+                                            <div v-for="(item, index) in row.injectionPath" :key="index">
+                                                {{ item }}
+                                            </div>
+                                        </div>
+                                    </template>
+                                </el-table-column>
                                 <el-table-column fixed prop="injectionType" label="Tag" width="50"></el-table-column>
 
                                 <el-table-column fixed="right" label="Operations" min-width="50">
