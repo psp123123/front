@@ -160,10 +160,13 @@ onMounted(async () => {
     }
 })
 
-const currentUrl = ref('xxx.example.com')
+const currentUrl = ref('')
 
 function handleClick(row: any) {
     console.log("选中的数据行", row)
+    if (row) {
+        currentUrl.value = row.url
+    }
 }
 
 </script>
