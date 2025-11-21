@@ -40,9 +40,7 @@
 
                                 <el-table-column fixed="right" label="操作" min-width="15%">
                                     <template #default="scope">
-                                        <el-button link type="primary" size="small" @click="handleClick(scope.row)">
-                                            Detail
-                                        </el-button>
+
                                         <el-button link type="primary" size="small"
                                             @click="editDialogEvent">Edit</el-button>
                                     </template>
