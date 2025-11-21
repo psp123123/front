@@ -166,8 +166,18 @@ function handleClick(row: any) {
     }
 }
 
-function deleteUrlData(row: any) {
-    console.log("删除选中数据", row.id)
+async function deleteUrlData(id: number) {
+    console.log("删除选中数据", id)
+    try {
+        await request.delete(`/api/collection/${id}`)
+        ElMessage.success("删除成功")
+
+        // 删除成功后，将数据从UrlList中移除数据
+        urlList.value = urlList.value.filter(item => item.id !== id)
+    } catch (error) {
+        console.error("删除失败", error);
+        ElMessage.error("删除失败");
+    }
 }
 </script>
 
