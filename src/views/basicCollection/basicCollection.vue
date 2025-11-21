@@ -41,8 +41,9 @@
                                 <el-table-column fixed="right" label="操作" min-width="15%">
                                     <template #default="scope">
 
-                                        <el-button link type="primary" size="small"
-                                            @click="editDialogEvent">Edit</el-button>
+                                        <el-button link type="primary" size="small" @click="editDialogEvent">
+                                            <SvgIcon name="edit"></SvgIcon>Edit
+                                        </el-button>
                                     </template>
                                 </el-table-column>
                             </el-table>
