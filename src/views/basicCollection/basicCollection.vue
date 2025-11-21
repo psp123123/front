@@ -44,7 +44,7 @@
                                         <el-button link type="primary" size="small" @click="editDialogEvent">
                                             <SvgIcon name="bianji"></SvgIcon>
                                         </el-button>
-                                        <el-button link type="danger" size="small" @click="deleteUrlData(scope.row)">
+                                        <el-button link type="danger" size="small" @click="deleteUrlData(scope.row.id)">
                                             <SvgIcon name="shanchu"></SvgIcon>
                                         </el-button>
                                     </template>
