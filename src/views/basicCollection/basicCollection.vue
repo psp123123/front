@@ -107,7 +107,8 @@
     <!-- ========== 新增/编辑弹窗 ========== -->
     <!-- <UrlEditDialog v-model="dialogVisible" :date="editingData" @save="handleSave" @cancel="handleCancel" /> -->
     <EditDialog v-model="customDraggingVisible" />
-    <ConfirmDialog v-model="dialogVisible" @confirm="deleteUrlData" />
+    <ConfirmDialog v-model="dialogVisible" @confirm="deleteUrlData" title="删除确认" confirm-type="danger"
+        :message="`是否删除数据: ${selectedRow?.url}`" />
 </template>
 
 <script setup lang="ts">
@@ -139,7 +140,8 @@ type UrlItem = {
     id: number
     date: string
     url: string
-    injection: string[]
+    injectionType: string
+    injectionPath: string[]
     tag: string
     domains: string[]       // 从详情看，需要这个字段
     ports: number[]
@@ -149,7 +151,7 @@ type UrlItem = {
 const urlList = ref<UrlItem[]>([])
 
 // 定义当前行数据
-const selectedRow = ref<any>(null);
+const selectedRow = ref<UrlItem>();
 
 // 发起获取列表数据请求，请求接口: /tt-api/api/collection/urlget
 onMounted(async () => {

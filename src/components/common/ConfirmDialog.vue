@@ -1,11 +1,12 @@
 <template>
-    <el-dialog v-model="visible" class="slide-dialog" title="Slide Animation Dialog" width="30%"
-        :transition="transitionName">
-        <p>This dialog uses a <strong>slide-down</strong> enter and <strong>slide-up</strong> leave animation.</p>
+    <el-dialog v-model="visible" class="slide-dialog" :title="title" width="30%" :transition="transitionName">
+        <p>{{ message }}</p>
         <template #footer>
-            <el-button @click="visible = false">Cancel</el-button>
-            <el-button type="primary" @click="handleConfirm">
-                Confirm
+            <!-- 取消按钮 -->
+            <el-button @click="visible = false">{{ cancelText }}</el-button>
+            <!-- 确认按钮 -->
+            <el-button :type="confirmType" @click="handleConfirm" :loading="confirmLoading">
+                {{ confirmText }}
             </el-button>
         </template>
     </el-dialog>
@@ -13,11 +14,23 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
+import type { ButtonType } from 'element-plus'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
     modelValue: boolean // 支持 v-model
-}>()
-
+    title: string
+    message?: string
+    cancelText?: string
+    confirmText?: string
+    confirmLoading?: boolean
+    confirmType?: ButtonType
+}>(), {
+    message: '请确认',
+    cancelText: '取消',
+    confirmText: '确认',
+    confirmLoading: false,
+    confirmType: 'primary'
+})
 const emit = defineEmits<{
     (e: 'update:modelValue', value: boolean): void
     (e: 'confirm'): void
