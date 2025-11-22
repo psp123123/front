@@ -264,6 +264,7 @@ p {
     flex-direction: column;
     box-sizing: border-box;
     padding: 0;
+    overflow-y: auto;
 }
 
 .url-info {
