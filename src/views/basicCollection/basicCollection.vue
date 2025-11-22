@@ -44,9 +44,11 @@
                                         <el-button link type="primary" size="small" @click="editDialogEvent">
                                             <SvgIcon name="bianji"></SvgIcon>
                                         </el-button>
-                                        <el-button link type="danger" size="small" @click="deleteUrlData(scope.row.id)">
+                                        <el-button link type="danger" size="small"
+                                            @click="deleteUrlData(scope.row.id, scope.row.url)">
                                             <SvgIcon name="shanchu"></SvgIcon>
                                         </el-button>
+
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -105,13 +107,20 @@
     <!-- ========== 新增/编辑弹窗 ========== -->
     <!-- <UrlEditDialog v-model="dialogVisible" :date="editingData" @save="handleSave" @cancel="handleCancel" /> -->
     <EditDialog v-model="customDraggingVisible" />
+    <ConfirmDialog v-model="dialogVisible" />
 </template>
 
 <script setup lang="ts">
 import { ref, h, onMounted } from 'vue';
 import { ElMessage } from 'element-plus'
+
 // 弹窗新增组件
 import EditDialog from '@/views/basicCollection/edit.vue'
+import ConfirmDialog from '@/components/common/ConfirmDialog.vue';
+const dialogVisible = ref(false)
+const currentAnimation = ref('fade')
+const isObjectConfig = ref(false)
+
 const customDraggingVisible = ref(false)
 function openDialog() {
     console.log('尝试打开弹窗')
@@ -166,8 +175,11 @@ function handleClick(row: any) {
     }
 }
 
-async function deleteUrlData(id: number) {
+async function deleteUrlData(id: number, type: string) {
     console.log("删除选中数据", id)
+    currentAnimation.value = type
+    isObjectConfig.value = false
+    dialogVisible.value = true
     try {
         await request.delete(`/api/collection/${id}`)
         ElMessage.success("删除成功")

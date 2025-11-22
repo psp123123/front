@@ -9,6 +9,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     Components: typeof import('./src/components/index.vue')['default']
+    ConfirmDialog: typeof import('./src/components/common/ConfirmDialog.vue')['default']
     EditPasswd: typeof import('./src/components/EditPasswd.vue')['default']
     EditProfile: typeof import('./src/components/EditProfile.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
