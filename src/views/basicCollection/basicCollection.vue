@@ -45,7 +45,7 @@
                                             <SvgIcon name="bianji"></SvgIcon>
                                         </el-button>
                                         <el-button link type="danger" size="small"
-                                            @click="deleteUrlData(scope.row.id, scope.row.url)">
+                                            @click="openDeleteConfirm(scope.row.id)">
                                             <SvgIcon name="shanchu"></SvgIcon>
                                         </el-button>
 
@@ -107,7 +107,7 @@
     <!-- ========== 新增/编辑弹窗 ========== -->
     <!-- <UrlEditDialog v-model="dialogVisible" :date="editingData" @save="handleSave" @cancel="handleCancel" /> -->
     <EditDialog v-model="customDraggingVisible" />
-    <ConfirmDialog v-model="dialogVisible" />
+    <ConfirmDialog v-model="dialogVisible" @confirm="deleteUrlData" />
 </template>
 
 <script setup lang="ts">
@@ -118,8 +118,7 @@ import { ElMessage } from 'element-plus'
 import EditDialog from '@/views/basicCollection/edit.vue'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue';
 const dialogVisible = ref(false)
-const currentAnimation = ref('fade')
-const isObjectConfig = ref(false)
+
 
 const customDraggingVisible = ref(false)
 function openDialog() {
@@ -174,22 +173,32 @@ function handleClick(row: any) {
         selectedRow.value = row
     }
 }
+// 定义删除状态
+const deleteData = ref<number | null>(null)
 
-async function deleteUrlData(id: number, type: string) {
-    console.log("删除选中数据", id)
-    currentAnimation.value = type
-    isObjectConfig.value = false
+// 打开删除确认弹窗
+const openDeleteConfirm = (id: number) => {
+    deleteData.value = id
     dialogVisible.value = true
-    // try {
-    //     await request.delete(`/api/collection/${id}`)
-    //     ElMessage.success("删除成功")
+}
 
-    //     // 删除成功后，将数据从UrlList中移除数据
-    //     urlList.value = urlList.value.filter(item => item.id !== id)
-    // } catch (error) {
-    //     console.error("删除失败", error);
-    //     ElMessage.error("删除失败");
-    // }
+
+
+// 执行删除
+async function deleteUrlData() {
+    console.log("删除选中数据")
+
+
+    try {
+        await request.delete(`/api/collection/${deleteData.value}`)
+        ElMessage.success("删除成功")
+
+        // 删除成功后，将数据从UrlList中移除数据
+        urlList.value = urlList.value.filter(item => item.id !== deleteData.value)
+    } catch (error) {
+        console.error("删除失败", error);
+        ElMessage.error("删除失败");
+    }
 }
 </script>
 
