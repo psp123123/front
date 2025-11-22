@@ -112,7 +112,7 @@
                                 <div class="info-card">
                                     <h4 class="info-title">Directory Info</h4>
                                     <el-text class="info-content" type="primary" tag="div">
-                                        <div v-for="(dir, index) in selectedRow.injectionPath" :key="index">
+                                        <div v-for="(dir, index) in selectedRow.directories" :key="index">
                                             {{ dir }}<br />
                                         </div>
                                     </el-text>
@@ -126,7 +126,7 @@
     </div>
     <!-- ========== 新增/编辑弹窗 ========== -->
     <!-- <UrlEditDialog v-model="dialogVisible" :date="editingData" @save="handleSave" @cancel="handleCancel" /> -->
-    <EditDialog v-model="customDraggingVisible" />
+    <EditDialog v-model="customDraggingVisible" :default-data="selectedRow" @confirm="postEditData" />
     <ConfirmDialog v-model="dialogVisible" @confirm="deleteUrlData" title="删除确认" confirm-type="danger"
         :message="`是否删除数据: ${selectedRow?.url}`" />
 </template>
@@ -138,12 +138,14 @@ import { ElMessage } from 'element-plus'
 // 弹窗新增组件
 import EditDialog from '@/views/basicCollection/edit.vue'
 import ConfirmDialog from '@/components/common/ConfirmDialog.vue';
+import type { UrlItem } from './basicCollection';
 const dialogVisible = ref(false)
 
 
 const customDraggingVisible = ref(false)
 function openDialog() {
     console.log('尝试打开弹窗')
+    selectedRow.value = null
     customDraggingVisible.value = true
 
 }
@@ -156,25 +158,12 @@ function editDialogEvent() {
 
 import request from '@/utils/auth'
 
-type UrlItem = {
-    id: number
-    date: string
-    url: string
-    injectionType: string
-    injectionPath: string[]
-    tag: string
-    domains: string[]       // 从详情看，需要这个字段
-    ports: number[]
-    managerUrl: string
-    managerUser: string
-    managerPass: string
-}
 
 // 定义响应式数据urlList
 const urlList = ref<UrlItem[]>([])
 
 // 定义当前行数据
-const selectedRow = ref<UrlItem>();
+const selectedRow = ref<UrlItem | null>();
 
 // 发起获取列表数据请求，请求接口: /tt-api/api/collection/urlget
 onMounted(async () => {
@@ -224,6 +213,10 @@ async function deleteUrlData() {
         console.error("删除失败", error);
         ElMessage.error("删除失败");
     }
+}
+
+const postEditData = async () => {
+
 }
 </script>
 

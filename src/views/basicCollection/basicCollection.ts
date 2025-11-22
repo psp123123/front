@@ -7,3 +7,17 @@
 
 // }
 // 引入请求工具request
+export type UrlItem = {
+  id: number
+  date: string
+  url: string
+  injectionType: string
+  injection: string
+  directories: string[]
+  tag: string
+  domains: string[]
+  ports: number[]
+  managerUrl: string
+  managerUser: string
+  managerPass: string
+}
