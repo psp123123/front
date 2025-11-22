@@ -244,7 +244,6 @@ p {
     display: flex;
     flex-direction: column;
     flex: 1;
-    overflow-y: auto;
 }
 
 .flex.flex-wrap {
@@ -265,7 +264,6 @@ p {
     flex-direction: column;
     box-sizing: border-box;
     padding: 0;
-    overflow-y: auto;
 }
 
 .url-info {
