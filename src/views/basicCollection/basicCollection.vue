@@ -186,7 +186,7 @@ const openDeleteConfirm = (id: number) => {
 
 // 执行删除
 async function deleteUrlData() {
-    console.log("删除选中数据")
+    console.log("删除选中数据", deleteData.value)
 
 
     try {
