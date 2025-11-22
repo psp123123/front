@@ -180,16 +180,16 @@ async function deleteUrlData(id: number, type: string) {
     currentAnimation.value = type
     isObjectConfig.value = false
     dialogVisible.value = true
-    try {
-        await request.delete(`/api/collection/${id}`)
-        ElMessage.success("删除成功")
+    // try {
+    //     await request.delete(`/api/collection/${id}`)
+    //     ElMessage.success("删除成功")
 
-        // 删除成功后，将数据从UrlList中移除数据
-        urlList.value = urlList.value.filter(item => item.id !== id)
-    } catch (error) {
-        console.error("删除失败", error);
-        ElMessage.error("删除失败");
-    }
+    //     // 删除成功后，将数据从UrlList中移除数据
+    //     urlList.value = urlList.value.filter(item => item.id !== id)
+    // } catch (error) {
+    //     console.error("删除失败", error);
+    //     ElMessage.error("删除失败");
+    // }
 }
 </script>
 
