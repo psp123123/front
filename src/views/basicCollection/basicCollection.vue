@@ -216,7 +216,7 @@ async function deleteUrlData() {
 }
 
 const postEditData = async () => {
-
+    console.log("上传数据", selectedRow.value)
 }
 </script>
 
