@@ -61,6 +61,26 @@
                             <div class="card-header">
                                 <span>{{ currentUrl }}</span>
                             </div>
+                            <div class="manager-info-card" v-show="selectedRow?.managerUrl">
+                                <!-- 后台地址行 -->
+                                <div class="info-row">
+                                    <span class="info-label">后台地址：</span>
+                                    <span class="info-value">{{ selectedRow?.managerUrl }}</span>
+                                </div>
+
+                                <!-- 账号和密码行 -->
+                                <div class="info-row">
+                                    <div class="info-group">
+                                        <span class="info-label">账号：</span>
+                                        <span class="info-value">{{ selectedRow?.managerUser }}</span>
+                                    </div>
+
+                                    <div class="info-group">
+                                        <span class="info-label">密码：</span>
+                                        <span class="info-value">{{ selectedRow?.managerPass }}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </template>
                         <el-row class="domain-info fill-height" :gutter="10">
                             <!-- Domain Info Card -->
@@ -145,6 +165,9 @@ type UrlItem = {
     tag: string
     domains: string[]       // 从详情看，需要这个字段
     ports: number[]
+    managerUrl: string
+    managerUser: string
+    managerPass: string
 }
 
 // 定义响应式数据urlList
@@ -388,5 +411,57 @@ p {
     text-align: center;
     white-space: pre-line;
     word-break: break-all;
+}
+
+/* 后台管理地址效果 */
+.manager-info-card {
+    /* padding: 20px; */
+    border: 1px solid #ebeef5;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+}
+
+/* 每一行的容器 */
+.info-row {
+    display: flex;
+    align-items: center;
+    /* 垂直居中 */
+    margin-bottom: 5px;
+}
+
+/* 最后一行去掉下边距 */
+.info-row:last-child {
+    margin-bottom: 0;
+}
+
+/* 标签样式 */
+.info-label {
+    color: #606266;
+    font-weight: 500;
+    margin-right: 8px;
+    /* 关键：给标签设置固定宽度并右对齐，实现整齐排列 */
+    width: 75px;
+    text-align: right;
+    flex-shrink: 0;
+    /* 防止标签被压缩 */
+}
+
+/* 值的样式 */
+.info-value {
+    color: #303133;
+    word-break: break-all;
+    /* 防止长地址撑破布局 */
+}
+
+/* 账号和密码的组合容器 */
+.info-group {
+    display: flex;
+    /* align-items: center; */
+}
+
+/* 两个 info-group 之间的间距 */
+.info-group+.info-group {
+    margin-left: 40px;
 }
 </style>
