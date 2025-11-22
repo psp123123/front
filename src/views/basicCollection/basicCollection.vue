@@ -215,8 +215,22 @@ async function deleteUrlData() {
     }
 }
 
-const postEditData = async () => {
+const postEditData = async (data: any) => {
     console.log("上传数据", selectedRow.value)
+    try {
+        const res = await request.post(`/api/collection/urlcreate`, data)
+
+        console.log("新增成功", res.data)
+        ElMessage.success("更新成功")
+
+        // 把新增的数据加到 urlList 里
+        urlList.value.push(res.data.item)
+
+
+    } catch (error) {
+        console.error("删除失败", error);
+        ElMessage.error("删除失败");
+    }
 }
 </script>
 
