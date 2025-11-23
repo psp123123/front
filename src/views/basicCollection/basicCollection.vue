@@ -228,8 +228,8 @@ const postEditData = async (data: any) => {
         console.log('res.data.item:', res.data.item);
 
     } catch (error) {
-        console.error("删除失败", error);
-        ElMessage.error("删除失败");
+        console.error("更新失败", error);
+        ElMessage.error("更新失败");
     }
 }
 </script>

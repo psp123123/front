@@ -82,7 +82,7 @@ watch(
             form.value = {
                 url: props.defaultData.url ?? '',
                 injectionType: props.defaultData.injectionType ?? '',
-                injection: props.defaultData.injection ?? '',
+                injection: props.defaultData?.injection ?? '',
                 managerUrl: props.defaultData.managerUrl ?? '',
                 managerUser: props.defaultData.managerUser ?? '',
                 managerPass: props.defaultData.managerPass ?? ''
