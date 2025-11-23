@@ -12,7 +12,7 @@ export type UrlItem = {
   date: string
   url: string
   injectionType: string
-  injection: string
+  injection: string[]
   directories: string[]
   tag: string
   domains: string[]
