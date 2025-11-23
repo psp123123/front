@@ -224,8 +224,10 @@ const postEditData = async (data: any) => {
         ElMessage.success("更新成功")
 
         // 把新增的数据加到 urlList 里
-        urlList.value.push(res.data.item)
-        console.log('res.data.item:', res.data.item);
+        const newItem = res.data.data  // ← 关键修复！
+
+        console.log('新增数据:', newItem)
+        urlList.value.push(newItem)
 
     } catch (error) {
         console.error("更新失败", error);
