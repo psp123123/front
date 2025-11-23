@@ -225,7 +225,7 @@ const postEditData = async (data: any) => {
 
         // 把新增的数据加到 urlList 里
         urlList.value.push(res.data.item)
-
+        console.log('res.data.item:', res.data.item);
 
     } catch (error) {
         console.error("删除失败", error);
