@@ -26,10 +26,10 @@
                             <el-table :data="urlList" @row-click="handleClick" height="500px">
                                 <el-table-column fixed prop="date" label="Date" min-width="15%" />
                                 <el-table-column fixed prop="url" label="url" min-width="20%" />
-                                <el-table-column prop="injectionPath" label="注入点" min-width="20%">
+                                <el-table-column prop="injection" label="注入点" min-width="20%">
                                     <template #default="{ row }">
                                         <div class="multi-line">
-                                            <div v-for="(item, index) in row.injectionPath" :key="index">
+                                            <div v-for="(item, index) in row.injection" :key="index">
                                                 {{ item }}
                                             </div>
                                         </div>
